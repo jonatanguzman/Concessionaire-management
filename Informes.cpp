@@ -87,6 +87,9 @@ void Informes::Menu()
 //1
 void Informes::Inventario()
 {
+    cout << "--- Informe de Inventario ---";
+
+
 }
 
 //2

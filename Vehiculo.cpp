@@ -3,14 +3,16 @@
 #include <cstring>
 using namespace std;
 #include "Vehiculo.h"
+#include "Fecha.h"
 
 Vehiculo::Vehiculo() {
+    Fecha anio;
     _idVehiculo = 0;
     strcpy(_marca, "S/D");
     strcpy(_modelo, "S/D");
     strcpy(_version, "S/D");
     strcpy(_color, "S/D");
-    _anioFabricacion = 2024;
+    _anioFabricacion = anio.obtenerAnioactual();
     _stock = 0;
     _precioUnidad = 0;
     _estado = false;
@@ -86,8 +88,24 @@ string Vehiculo::getColor() {
 }
 
 void Vehiculo::setAnioFabricacion(int a) {
-    _anioFabricacion = a;
+    Fecha anio;
+    if(a<=anio.obtenerAnioactual()){
+        _anioFabricacion = a;
+    }
+    if(a>anio.obtenerAnioactual()){
+        cout << "* El Anio de Fabricacion No puede ser Mayor al Anio Actual *" << endl;
+        cout << "- Ingreselo Nuevamente: ";
+        cin >> a;
+        this->setAnioFabricacion(a);      
+    }
+    if (a < 2000) {
+        cout << "* El Anio de Fabricacion No puede ser Menor a 2000" << endl;
+        cout << "- Ingreselo Nuevamente: ";
+        cin >> a;
+        this->setAnioFabricacion(a);
+    }
 }
+
 int Vehiculo::getAnioFabricacion() {
     return _anioFabricacion;
 }

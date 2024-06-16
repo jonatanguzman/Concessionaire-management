@@ -38,8 +38,8 @@ void VehiculosManager::Menu() {
         cout << "2) Listar " << endl;
         cout << "3) Buscar " << endl;
         cout << "4) Editar " << endl;
-        cout << "5) Eliminar " << endl;
-        cout << "6) Restaurar " << endl;
+        cout << "5) Eliminar Registro " << endl;
+        cout << "6) Restablecer Registro " << endl;
         cout << "7) Realizar Backup " << endl;
         cout << "8) Restaurar Backup " << endl;
         cout << "0) Regresar al menu anterior " << endl;
