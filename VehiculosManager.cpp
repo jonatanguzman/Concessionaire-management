@@ -602,7 +602,7 @@ string formatearNumero(float numero) {
     for (int i = 0; i < longitud; ++i) {
         parteEnteraFormateada += parteEntera[i];
         if ((longitud - i - 1) % 3 == 0 && (i != longitud - 1)) {
-            parteEnteraFormateada += '.';
+            parteEnteraFormateada += ',';
         }
     }
     return parteEnteraFormateada + parteDecimal;
