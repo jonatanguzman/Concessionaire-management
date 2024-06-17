@@ -111,7 +111,16 @@ int Vehiculo::getAnioFabricacion() {
 }
 
 void Vehiculo::setStock(int s) {
-    _stock = s;
+    if (s >= 0) {
+        _stock = s;
+    }
+    else {
+        cout << "* El Stock No puede ser Negativo *" << endl;
+        cout << "- Ingreselo Nuevamente: ";
+        cin >> s;
+        this->setStock(s);
+    }
+        
 }
 int Vehiculo::getStock() {
     return _stock;

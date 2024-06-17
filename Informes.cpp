@@ -87,9 +87,48 @@ void Informes::Menu()
 //1
 void Informes::Inventario()
 {
-    cout << "--- Informe de Inventario ---";
-
-
+    VehiculosArchivo archiV;
+    Vehiculo regVeh;
+    int cantReg,contDisp=0,contAgo=0;
+    cantReg = archiV.contarRegistros();
+    cout << left;
+    cout << "--- Informe de Inventario ---" << endl;
+    cout << "-------- Disponibles --------" << endl;
+    cout << setw(9) << "Marca";
+    cout << setw(15) << "Modelo";
+    cout << setw(6) << "Stock";
+    cout << endl;
+    for (int i = 0; i < cantReg; i++) {
+        regVeh = archiV.leerRegistro(i);
+        if (regVeh.getEstado() == true) {
+            if(regVeh.getStock()!=0){
+                cout << setw(9) << regVeh.getMarca();
+                cout << setw(15) << regVeh.getModelo();
+                cout << setw(6) << regVeh.getStock();
+                cout << endl;
+                contDisp++;
+            }
+        }
+    }
+    cout << endl;
+    cout << "--------- Agotados ----------" << endl;
+    cout << setw(9) << "Marca";
+    cout << setw(15) << "Modelo";
+    cout << setw(6) << "Stock";
+    cout << endl;
+    for (int j = 0; j < cantReg; j++) {
+        regVeh = archiV.leerRegistro(j);
+        if (regVeh.getEstado() == true) {
+            if (regVeh.getStock() == 0) {
+                cout << setw(9) << regVeh.getMarca();
+                cout << setw(15) << regVeh.getModelo();
+                cout << setw(6) << regVeh.getStock();
+                cout << endl;
+                contAgo++;
+            }
+        }
+    }
+    cout << endl;
 }
 
 //2
