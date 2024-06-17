@@ -43,14 +43,20 @@ void Fecha::setMes(int m) {
 }
 
 void Fecha::setAnio(int a) {
-    if (a >= 1900) {
+    if (a <= Fecha::obtenerAnioactual()) {
         _anio = a;
     }
-    else {
-        cout << "Año no valido. Intente nuevamente:" << endl;
+    if (a > Fecha::obtenerAnioactual()) {
+        cout << "* El Anio No puede ser Mayor al Anio Actual *" << endl;
+        cout << "- Ingreselo Nuevamente: ";
         cin >> a;
         this->setAnio(a);
-        cin.ignore();
+    }
+    if (a < 1900) {
+        cout << "* El Anio No puede ser Menor a 1900" << endl;
+        cout << "- Ingreselo Nuevamente: ";
+        cin >> a;
+        this->setAnio(a);
     }
 }
 
