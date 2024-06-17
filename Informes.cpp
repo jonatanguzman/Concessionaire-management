@@ -106,7 +106,7 @@ void Informes::Inventario()
                 cout << setw(15) << regVeh.getModelo();
                 cout << setw(6) << regVeh.getStock();
                 cout << endl;
-                contDisp++;
+                contDisp+=regVeh.getStock();
             }
         }
     }
@@ -128,6 +128,11 @@ void Informes::Inventario()
             }
         }
     }
+    cout << endl;
+    cout << "-----------------------------" << endl;
+    cout << "---------- Totales ----------" << endl;
+    cout << "- Autos Disponibles:    " << contDisp << endl;
+    cout << "- Autos Agotados:       " << contAgo << endl;
     cout << endl;
 }
 
