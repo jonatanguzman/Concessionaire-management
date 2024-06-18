@@ -5,10 +5,10 @@
 #include <ctime>
 using namespace std;
 
-Fecha::Fecha(int dia, int mes, int anio) {
-    setDia(dia);
-    setMes(mes);
-    setAnio(anio);
+Fecha::Fecha(int dia, int mes, int anio) { 
+        setDia(dia);
+        setMes(mes);
+        setAnio(anio);
 }
 
 Fecha::Fecha() {
@@ -43,20 +43,14 @@ void Fecha::setMes(int m) {
 }
 
 void Fecha::setAnio(int a) {
-    if (a <= Fecha::obtenerAnioactual()) {
+    if (a >= 1900) {
         _anio = a;
     }
-    if (a > Fecha::obtenerAnioactual()) {
-        cout << "* El Anio No puede ser Mayor al Anio Actual *" << endl;
-        cout << "- Ingreselo Nuevamente: ";
+    else {
+        cout << "Año no valido. Intente nuevamente:" << endl;
         cin >> a;
         this->setAnio(a);
-    }
-    if (a < 1900) {
-        cout << "* El Anio No puede ser Menor a 1900" << endl;
-        cout << "- Ingreselo Nuevamente: ";
-        cin >> a;
-        this->setAnio(a);
+        cin.ignore();
     }
 }
 
@@ -67,19 +61,27 @@ int Fecha::getMes() { return _mes; }
 int Fecha::getAnio() { return _anio; }
 
 void Fecha::Cargar() {
-    int d, m, a;
+    int dia, mes, anio;
     cout << "Dia: ";
-    cin >> d;
-    setDia(d);
+    cin >> dia;
     cin.ignore();
     cout << "Mes: ";
-    cin >> m;
-    setMes(m);
+    cin >> mes;
     cin.ignore();
     cout << "Año: ";
-    cin >> a;
-    setAnio(a);
-    //cin.ignore();
+    cin >> anio;
+    time_t now = time(0);
+    tm* f = localtime(&now);
+    /// Verifica si la fecha es anterior o igual a la fecha actual
+    if (anio > f->tm_year + 1900 || (anio == f->tm_year + 1900 && mes > f->tm_mon + 1) || (anio == f->tm_year + 1900 && mes == f->tm_mon + 1 && dia > f->tm_mday)) {
+        cout << "Fecha No Valida, Ingresela Nuevamente "<<endl;
+        Fecha::Cargar();
+    }
+    else {
+        setDia(dia);
+        setMes(mes);
+        setAnio(anio);
+    }
 }
 
 
