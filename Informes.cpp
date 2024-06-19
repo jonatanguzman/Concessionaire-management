@@ -257,28 +257,5 @@ void Informes::ventasTodasLasSucursalesAnual()
 
 //7
 void Informes::rankingVentasXModelo()
-{   
-    VentasArchivo archiVen("ventas.dat");
-    Venta venReg;
-
-    VehiculosArchivo archiVeh("vehiculos.dat");
-    Vehiculo vehReg;
-
-    int anio,cantVen,cantVeh;
-    cout << "- Ranking Anual de Ventas por Modelo -" << endl;
-    cout << "---------------------------------------" << endl;
-    cout << "- Ingrese el Año que desea Consultar: " << endl;
-    cin << anio;
-    system("cls");
-    cout << "- Ranking Anual de Ventas por Modelo -" << endl;
-    cout << "---------------------------------------" << endl;
-    cout << "- Año: " << anio << endl;
-    cantVen = archiV.contarVentas();
-    for (int i = 0; i < cantVen; i++) {
-        venReg = archiV.leerVenta(i);
-        if (venReg.getFechaVenta.getAnio() == anio) {
-            cout << venReg.getIdVenta();
-            cout << endl;
-        }
-    }
+{
 }
