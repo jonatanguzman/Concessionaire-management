@@ -9,6 +9,7 @@ public:
 	ClienteManager();
 	void Menu();
 	Cliente crearCliente();
+	Cliente crearCliente(long long dni);
 	void mostrarCliente(Cliente reg);
 	void mostrarClienteEnLinea(Cliente reg);
 	void agregarCliente();

@@ -212,7 +212,7 @@ void VendedorManager::EliminarVendedor(){
         MostrarVendedor(vendedor);
         std::cout<<std::endl<<std::endl;
 
-        std::cout<< "Desea eliminar este vendedor. Confirar? S/N" << std::endl;
+        std::cout<< "Desea eliminar este vendedor. Confirmar? S/N" << std::endl;
         std::cout<<"OPCION: ";
         std::cin >> opcion;
         system("cls");
@@ -305,7 +305,7 @@ void VendedorManager::Menu(){
                 system("pause");
                 break;
             case 2:
-                ListarVendedor();
+               ListarApellido();
                 system("pause");
                 break;
             case 3:
@@ -348,7 +348,6 @@ void VendedorManager::Menu(){
                     if(opc2==3){// Salir del bucle del submenú si se elige la opción 3
                         break;
                     }
-                    system("pause");
                 }
                 break;
             case 0:
@@ -385,4 +384,124 @@ bool VendedorManager::DniRepetido(long long idPersona) {
         }
     }
     return false;
+}
+
+bool creciente(int num, int num2) {
+    return num < num2;
+}
+
+bool decreciente(int num, int num2) {
+    return num > num2;
+}
+
+void VendedorManager::OrdenarPorAntiguedad(Vendedor* obj, int cantidad, bool criterio(int, int)) {
+    Vendedor aux;
+
+    for (int i = 0; i < cantidad; i++) {
+        for (int j = i + 1; j < cantidad; j++) {
+            if (criterio(obj[j].getAntiguedad(), obj[i].getAntiguedad())) {
+                aux = obj[j];
+                obj[j] = obj[i];
+                obj[i] = aux;
+            }
+        }
+    }
+}
+
+void VendedorManager::ListarAntiguedad() {
+    int cantidad = _archivo.ContarRegistro();
+    Vendedor* vec, reg;
+
+    vec = new Vendedor[cantidad];
+    if (vec == nullptr) {
+        std::cout << "No hay memoria.";
+    }
+
+    if (cantidad == 0) {
+        std::cout << "No hay Vendedores para mostrar." << std::endl;
+    }
+    else {
+         MostrarPantalla(); 
+        for (int i = 0; i < cantidad; i++) {
+            reg = _archivo.leerRegistro(i);
+            vec[i] = reg;
+        }
+
+        OrdenarPorAntiguedad(vec, cantidad, creciente);  
+
+        for (int i = 0; i < cantidad; i++) {
+            if (vec[i].getEliminado() == false) {
+                MostrarVendedor(vec[i]);
+                std::cout << std::endl;
+            }
+        }
+        std::cout << std::endl;
+    }
+    delete[]vec;
+}
+
+bool creciente(std::string  n, std::string m) {
+    return n < m;
+}
+
+bool decreciente(std::string n, std::string m) {
+    return n > m;
+}
+
+void VendedorManager::OrdenarPorApellido(Vendedor* obj, int cantidad, bool criterio(std::string, std::string)) {
+    Vendedor aux;
+
+    for (int i = 0; i < cantidad; i++) {
+        for (int j = i + 1; j < cantidad; j++) {
+            if (criterio(obj[j].getApellido(), obj[i].getApellido())) {
+                aux = obj[j];
+                obj[j] = obj[i];
+                obj[i] = aux;
+            }
+        }
+    }
+}
+
+void VendedorManager::ListarApellido() {
+    int cantidad = _archivo.ContarRegistro();
+    Vendedor* vec, reg;
+
+    vec = new Vendedor[cantidad];
+    if (vec == nullptr) {
+        std::cout << "No hay memoria.";
+    }
+
+    if (cantidad == 0) {
+        std::cout << "No hay Vendedores para mostrar." << std::endl;
+    }
+    else {
+        MostrarPantalla();
+        for (int i = 0; i < cantidad; i++) {
+            reg = _archivo.leerRegistro(i);
+            vec[i] = reg;
+        }
+
+        OrdenarPorApellido(vec, cantidad, creciente);
+
+        for (int i = 0; i < cantidad; i++) {
+            if (vec[i].getEliminado() == false) {
+                MostrarVendedor(vec[i]);
+                std::cout << std::endl;
+            }
+        }
+        std::cout << std::endl;
+    }
+    delete[]vec;
+}
+
+void VendedorManager::MostrarPantalla() {
+    std::cout << std::left;
+    std::cout << std::setw(14) << "DNI ";
+    std::cout << std::setw(20) << "NOMBRE";
+    std::cout << std::setw(20) << "APELLIDO ";
+    std::cout << std::setw(23) << "FECHA NACIMIENTO ";
+    std::cout << std::setw(10) << "LEGAJO ";
+    std::cout << std::setw(20) << "FECHA INGRESO ";
+    std::cout << std::setw(10) << "ANTIGUEDAD ";
+    std::cout << std::endl;
 }

@@ -20,4 +20,10 @@ public:
     void Menu();
     bool LegajoRepetido(int idLegajo);
     bool DniRepetido(long long idPersona);
+
+    void OrdenarPorAntiguedad(Vendedor* obj, int cantidad, bool criterio(int, int));
+    void ListarAntiguedad();
+    void OrdenarPorApellido(Vendedor* obj, int cantidad, bool criterio(std::string, std::string));
+    void ListarApellido();
+    void MostrarPantalla();
 };

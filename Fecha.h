@@ -6,8 +6,8 @@ private:
     int _dia, _mes, _anio;
     void setDia(int d);
     void setMes(int m);
-    void setAnio(int a);
 public:
+    void setAnio(int a);
     Fecha();
     Fecha(int dia, int mes, int anio);
     int getDia();
@@ -16,8 +16,12 @@ public:
 
     void Cargar();
     bool operator>(const Fecha& otra); // if fecha > fecha otra == true
+    bool operator>=(const Fecha& otra); // if fecha >= fecha otra == true
     std::string toString();
-    int obtenerAnioactual();
+    int obtenerAnioActual();
+    int obtenerMesActual();
+    int obtenerDiaActual();
+    Fecha obtenerFechaActual();
 
 };
 

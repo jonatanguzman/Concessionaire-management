@@ -38,50 +38,43 @@ void VehiculosManager::Menu() {
         cout << "2) Listar " << endl;
         cout << "3) Buscar " << endl;
         cout << "4) Editar " << endl;
-        cout << "5) Eliminar Registro " << endl;
-        cout << "6) Restablecer Registro " << endl;
+        cout << "5) Eliminar registro" << endl;
+        cout << "6) Reestablecer registro " << endl;
         cout << "7) Realizar Backup " << endl;
         cout << "8) Restaurar Backup " << endl;
         cout << "0) Regresar al menu anterior " << endl;
         cout << "----------------------" << endl;
         cout << "Selecione una Opcion: ";
         cin >> opc;
+        system("cls");
         switch (opc) {
-        case 1: system("cls");
-            agregarVehiculo();
+        case 1: agregarVehiculo();
             system("pause");
             break;
-        case 2: system("cls");
-            listarVehiculos();
+        case 2: listarVehiculos();
             system("pause");
             break;
-        case 3: system("cls"); 
-            buscarVehiculo();
+        case 3: buscarVehiculo();
             system("pause");
             break;
-        case 4: system("cls"); 
-            editarVehiculo();
+        case 4: editarVehiculo();
             system("pause");
             break;
-        case 5: system("cls");
-            eliminarVehiculo();
+        case 5: eliminarVehiculo();
             system("pause");
             break;
-        case 6: system("cls"); 
-            resturarVehiculo();
+        case 6: resturarVehiculo();
             system("pause");
             break;
-        case 7: system("cls"); 
-            realizarBackup();
+        case 7: realizarBackup();
             system("pause");
             break;
-        case 8: system("cls"); 
-            restaurarBackup();
+        case 8: restaurarBackup();
             system("pause");
             break;
         case 0:
             break;
-        default:cout << endl << "* Selecione una Opcion Correcta! *" << endl << endl;
+        default:cout << endl << "* Selecione una Opcion Correcta! *" << endl << endl;;
             system("pause");
         }
     } while (opc != 0);
@@ -200,7 +193,7 @@ void VehiculosManager::buscarVehiculo() {
         cout << "1) Por ID " << endl;
         cout << "2) Por Modelo " << endl;
         cout << "3) Por Anio de Fabricacion " << endl;
-        cout << "4) Por Color " << endl;
+        cout << "4) Por Color " << endl << endl;
         cout << "0) Salir " << endl;
         cout << "Ingrese una Opcion: ";
         cin >> opc;
@@ -214,8 +207,10 @@ void VehiculosManager::buscarVehiculo() {
             break;
         case 4:buscarPorColor();
             break;
+        case 0:
+            break;
         default:cout << endl << "* Opcion Incorrecta! *" << endl << endl;
-            return;
+            break;
         }
     }
     cout << endl;

@@ -26,7 +26,7 @@ public:
 	void borrarVenta();
 	
 	int validarCliente(long long dni);
-	void crearNuevoCliente();
+	void crearNuevoCliente(long long dni);
 	void mostrarClienteAsociado(int pos);
 	std::string mostrarNombreCliente(long long dni);
 	

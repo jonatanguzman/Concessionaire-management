@@ -83,8 +83,23 @@ void Persona::setApellido(std::string apellido) {
     
 }
 
-void Persona::setFechaNacimiento(Fecha fechaNacimiento) {
-    _fechaNacimiento = fechaNacimiento;
+void Persona::setFechaNacimiento(Fecha fechaNacimiento) 
+{
+    Fecha fAux;
+    
+    fAux = fAux.obtenerFechaActual();
+
+    fAux.setAnio(fAux.obtenerAnioActual() - 18); //para validar si es mayor de 18 años
+
+    if (fAux >= fechaNacimiento) {
+        _fechaNacimiento = fechaNacimiento;
+    }
+    else {
+        cout << "Persona menor de edad. Ingrese fecha de nacimiento valida " << endl << endl;
+        fechaNacimiento.Cargar();
+        setFechaNacimiento(fechaNacimiento);
+    }
+
 }
 
 int Persona::contarDigitos(long long num)

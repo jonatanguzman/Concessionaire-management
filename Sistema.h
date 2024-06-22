@@ -25,5 +25,6 @@ private:
 public:
 	Sistema();
 	void Menu();
+	void Creditos();
 };
 

@@ -6,7 +6,7 @@ private:
     int _idSucursal;
     char _nombre[40];
     Direccion _direccion;
-    char _telefono[10];
+    char _telefono[16];
     bool _estado;
 public:
     Sucursal();

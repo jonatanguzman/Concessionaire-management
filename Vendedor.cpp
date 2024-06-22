@@ -63,7 +63,7 @@ void Vendedor::setAntiguedad(int antiguedad) {
 
 int Vendedor::calcularAntiguedad()
 {
-    int antiguedad = _fechaIngreso.obtenerAnioactual() - _fechaIngreso.getAnio();
+    int antiguedad = _fechaIngreso.obtenerAnioActual() - _fechaIngreso.getAnio();
 
     return antiguedad;
 }

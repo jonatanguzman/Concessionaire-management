@@ -7,5 +7,5 @@ public:
     void subMenuVentas();
     void subMenuSucursales();
     void subMenuVendedores();
-    void subMenuClientes();    
+    void subMenuClientes();
 };

@@ -5,17 +5,17 @@
 #include <ctime>
 using namespace std;
 
-Fecha::Fecha(int dia, int mes, int anio) { 
-        setDia(dia);
-        setMes(mes);
-        setAnio(anio);
+Fecha::Fecha(int dia, int mes, int anio) {
+    setDia(dia);
+    setMes(mes);
+    setAnio(anio);
 }
 
 Fecha::Fecha() {
     setDia(1);
     setMes(1);
     setAnio(1900);
-  
+
 }
 
 void Fecha::setDia(int d) {
@@ -74,7 +74,7 @@ void Fecha::Cargar() {
     tm* f = localtime(&now);
     /// Verifica si la fecha es anterior o igual a la fecha actual
     if (anio > f->tm_year + 1900 || (anio == f->tm_year + 1900 && mes > f->tm_mon + 1) || (anio == f->tm_year + 1900 && mes == f->tm_mon + 1 && dia > f->tm_mday)) {
-        cout << "Fecha No Valida, Ingresela Nuevamente "<<endl;
+        cout << "Fecha No Valida, Ingresela Nuevamente " << endl;
         Fecha::Cargar();
     }
     else {
@@ -118,10 +118,27 @@ bool Fecha::operator>(const Fecha& otra) {
     }
 }
 
+bool Fecha::operator>=(const Fecha& otra) {
+    if (this->_anio > otra._anio) {
+        return true;
+    }
+    else if (this->_anio == otra._anio) {
+        if (this->_mes > otra._mes) {
+            return true;
+        }
+        else if (this->_mes == otra._mes) {
+            if (this->_dia >= otra._dia) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 string Fecha::toString()
 {
     string valorADevolver;
-    valorADevolver = to_string(_dia) + "/" + to_string(_mes) + "/" + to_string(_anio); 
+    valorADevolver = to_string(_dia) + "/" + to_string(_mes) + "/" + to_string(_anio);
 
     if (to_string(_dia).size() == 1) {
         if (to_string(_mes).size() == 1) {
@@ -144,18 +161,38 @@ string Fecha::toString()
 
 }
 
-int Fecha::obtenerAnioactual()
+int Fecha::obtenerAnioActual()
 {
     time_t t = time(0);
     tm* tiempoLocal = localtime(&t);
-    return 1900 + tiempoLocal->tm_year;  // tm_year es el número de años desde 1900
-    
+    return 1900 + tiempoLocal->tm_year;  // tm_year es el numero de años desde 1900
+
     /*
     primera linea; obtiene el tiempo actual en segundos desde el 1 de enero de 1970.
-    segunda linea; convierte este tiempo en una estructura tm que contiene información de fecha y hora desglosada.
-    tercer linea; obtiene el año actual, ya que tm_year representa el número de años transcurridos desde 1900.
+    segunda linea; convierte este tiempo en una estructura tm que contiene informacion de fecha y hora desglosada.
+    tercer linea; obtiene el año actual, ya que tm_year representa el numero de años transcurridos desde 1900.
     */
 }
 
+int Fecha::obtenerMesActual()
+{
+    time_t t = time(0);
+    tm* tiempoLocal = localtime(&t);
+    return tiempoLocal->tm_mon+1;
+}
 
+int Fecha::obtenerDiaActual()
+{
+    time_t t = time(0);
+    tm* tiempoLocal = localtime(&t);
+    return tiempoLocal->tm_mday;
+}
 
+Fecha Fecha::obtenerFechaActual() 
+{
+    time_t t = time(0);
+    tm* tiempoLocal = localtime(&t);
+
+    return Fecha(tiempoLocal->tm_mday, tiempoLocal->tm_mon+1, tiempoLocal->tm_year+1900);
+
+}

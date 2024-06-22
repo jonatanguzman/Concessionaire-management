@@ -34,7 +34,7 @@ void VentasManager::Menu()
         cout << endl;
         cout << "0. Regresar al menu anterior " << endl;
         cout << "----------------------" << endl;
-        cout << "OPCION: " << endl;
+        cout << "OPCION: ";
         cin >> opcion;
         system("cls");
 
@@ -73,8 +73,11 @@ void VentasManager::Menu()
             break;
 
         case 0:
-            
             break;
+
+        default:
+            cout << endl << "* Selecione una Opcion Correcta! *" << endl << endl;;
+            system("pause");
         }
     } while (opcion != 0);
 }
@@ -113,8 +116,9 @@ Venta VentasManager::crearVenta()
         switch (opc) {
         case 'S':
         case 's':
-            crearNuevoCliente();
+            crearNuevoCliente(dni);
             reg.setDniCliente(dni);
+            posCliente = validarCliente(dni); 
             system("cls");
             break;
 
@@ -291,7 +295,8 @@ void VentasManager::menuListados()
         break;
 
     default:
-        break;
+        cout << endl << "* Selecione una Opcion Correcta! *" << endl << endl;
+        system("pause");
     }
 }
 
@@ -451,7 +456,14 @@ void VentasManager::editarVenta()
     
     }
     else {
-        cout << "Error al buscar la venta. Codigo " << pos << endl;
+        cout << "Error al buscar la venta. Codigo: (";
+        if (pos == -1) {
+            cout << pos << ") La venta no existe." << endl;
+        }
+        if (pos == -2) {
+            cout << pos << ") No se pudo abrir el archivo" << endl;
+
+        }
     }
 }
 
@@ -539,11 +551,12 @@ int VentasManager::validarCliente(long long dni)
     }
 }
 
-void VentasManager::crearNuevoCliente()
+void VentasManager::crearNuevoCliente(long long dni)
 {
     ClienteManager cm;
+    ClienteArchivo ca;
     
-    cm.crearCliente();
+    ca.guardarCliente(cm.crearCliente(dni));
 
     
 }
@@ -590,14 +603,16 @@ int VentasManager::validarSucursal(int id)
 
 void VentasManager::mostrarSucursalAsociada(int pos)
 {
-    SucursalManager sm;
     SucursalArchivo sa;
     Sucursal aux;
 
     aux = sa.leerRegistro(pos); 
     cout << "Sucursal asignada: " << endl;
-    sm.mostrarRegistro(aux);
+    cout << "Id Sucursal: #" << aux.getIdSucursal() << endl;
+    cout << "Nombre: " << aux.getNombre() << endl;
+    cout << "Dirección: " << aux.getDireccion().toString();
     cout << endl;
+    cout << "Telefono: " << aux.getTelefono() << endl << endl;
 }
 
 std::string VentasManager::mostrarNombreSucursal(int id)
@@ -637,6 +652,7 @@ void VentasManager::mostrarVendedorAsociado(int pos)
     aux = va.leerRegistro(pos);
     cout << "Vendedor asignado: " << endl;
     aux.MostrarPersona();
+    cout << endl;
     cout << "NRO LEGAJO: " << aux.getNroLegajo() << endl;
     cout << "FECHA DE INGRESO: " << aux.getFechaIngreso().toString() << endl;
     cout << "ANTIGUEDAD: " << aux.getAntiguedad();
@@ -665,6 +681,8 @@ bool VentasManager::validarVehiculo(int& id)
     if (pos >= 0) {
         Vehiculo aux = va.leerRegistro(pos);
         if (aux.getStock() > 0) {
+            aux.setStock(aux.getStock() - 1);
+            va.modificarRegistro(aux, pos);
             return true;
 
         }
@@ -690,9 +708,7 @@ bool VentasManager::validarVehiculo(int& id)
             resultado = validarVehiculo(id);
         } while (resultado == false);
         
-        return true;
     }
-    
     
 }
 
@@ -708,9 +724,9 @@ void VentasManager::mostrarVehiculoAsociado(int id)
     cout << "ID Vehiculo: " << aux.getIdVehiculo() << endl;
     cout << "Marca y Modelo: " << aux.getMarca() << " " << aux.getModelo() << endl;
     cout << "Version: " << aux.getVersion() << endl;
-    cout << "Color: " << aux.getColor();
+    cout << "Color: " << aux.getColor() << endl;
     cout << "Año de fabricación: " << aux.getAnioFabricacion() << endl;
-    cout << "Stock actual: " << aux.getStock() << endl;
+    //cout << "Stock actualizado: " << aux.getStock() << endl;
     cout << "Precio unidad: $" << formatearNumero(aux.getPrecioUnidad());
     cout << endl;
 }

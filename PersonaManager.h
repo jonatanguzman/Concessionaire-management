@@ -8,6 +8,7 @@ private:
 public:
 
     void CargarPersona();
+    void CargarPersona(long long dni);
     void MostrarPersona();
     void MostrarPersonaEnLinea();
 };

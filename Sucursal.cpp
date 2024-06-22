@@ -46,9 +46,9 @@ void Sucursal::setIdSucursal(int s) {
     while (!validar(s) || sm.validarIDUnico(s)) {
         cin.clear();//limpia el estado de error
         cin.ignore(numeric_limits<int>::max(), '\n');
-        cout << "Sucursal no valida." << endl;
-        cout << "Sucrsal: ";
+        cout << "ID no valido. Ingrese nuevo ID: ";
         cin >> s;
+        cin.ignore();
     }
     _idSucursal = s;
 
@@ -67,7 +67,7 @@ void Sucursal::setDireccion(Direccion d) {
 }
 
 void Sucursal::setTelefono(string t) {
-    if (t.size() <= 10) {
+    if (t.size() <= 15) {
         strcpy(_telefono, t.c_str());
     }
 }
@@ -97,7 +97,6 @@ void Sucursal::Cargar()
 	cin >> id;
 	cin.ignore();
 	setIdSucursal(id);
-	//validarIdUnico(id);
 	cout << "Ingrese Nombre de Sucursal: ";
 	getline(cin, nombre);
 	setNombre(nombre);

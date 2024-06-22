@@ -38,7 +38,7 @@ void Configuracion::Menu() {
         default:cout << endl << "* Selecione una Opcion Correcta! *" << endl << endl;
             system("pause");
         }
-    } while (opc!=0);
+    } while (opc != 0);
 }
 
 void realizarBackupVehiculos() {
@@ -93,7 +93,7 @@ void restaurarBackupVehiculos() {
     } while (opc != 2);
 }
 
-void Configuracion::subMenuVehiculos() { 
+void Configuracion::subMenuVehiculos() {
     int opc;
     cout << "--- Archivo Vehiculos ---" << endl;
     cout << "1) Realizar Backup " << endl;
@@ -104,7 +104,7 @@ void Configuracion::subMenuVehiculos() {
         cin >> opc;
         switch (opc)
         {
-        case 1: 
+        case 1:
             realizarBackupVehiculos();
             system("cls");
             return;
