@@ -127,7 +127,15 @@ int Vehiculo::getStock() {
 }
 
 void Vehiculo::setPrecioUnidad(float p) {
-    _precioUnidad = p;
+    if (p >= 0) {
+        _precioUnidad = p;
+    }
+    else {
+        cout << "* El Precio No puede ser Negativo *" << endl;
+        cout << "- Ingreselo Nuevamente: ";
+        cin >> p;
+        this->setPrecioUnidad(p);
+    }
 }
 float Vehiculo::getPrecioUnidad() {
     return _precioUnidad;

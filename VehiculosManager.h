@@ -14,6 +14,7 @@ public:
     void listarVehiculos();
     void buscarVehiculo();
     void buscarPorID();
+    void buscarPorMarca();
     void buscarPorModelo();
     void buscarPorAnio();
     void buscarPorColor();
