@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <limits>
+///#include <limits>
 using namespace std;
 
 VehiculosManager::VehiculosManager() : _vehiculosArchivo("Vehiculos.dat")
