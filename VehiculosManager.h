@@ -12,6 +12,8 @@ public:
     void agregarVehiculo();
     void mostrarVehiculo(Vehiculo reg);
     void listarVehiculos();
+    void listarPorId();
+    void listarPorPrecio();
     void buscarVehiculo();
     void buscarPorID();
     void buscarPorMarca();

@@ -162,27 +162,98 @@ void VehiculosManager::mostrarVehiculo(Vehiculo reg) {
 
 void VehiculosManager::listarVehiculos() {
     int cantReg = _vehiculosArchivo.contarRegistros();
-    if (cantReg == -1)cout << endl << "* Error de Archivo *" << endl;
-    else {
-        Vehiculo reg;
-        cout << left;
-        cout << setw(26) << " " << "- Datos de los Vehiculos -" << endl;
-        cout << "-----------------------------------------------------------------------------------" << endl;
-        cout << setw(4) << "ID ";
-        cout << setw(10) << "Marca ";
-        cout << setw(14) << "Modelo ";
-        cout << setw(12) << "Version ";
-        cout << setw(10) << "Color ";
-        cout << setw(8) << "Año ";
-        cout << setw(8) << "Stock ";
-        cout << setw(20) << "Precio por Unidad ";
-        cout << endl;
-        for (int i = 0; i < cantReg; i++) {
-            reg = _vehiculosArchivo.leerRegistro(i);
-            if (reg.getEstado() == true) {
-
-                mostrarVehiculo(reg);
+    if (cantReg == -1) {
+        cout << endl << "* Error de Archivo *" << endl << endl;
+        system("pause");
+    }
+    if (cantReg == 0) {
+        cout << endl << "* No Hay Registros para Mostrar *" << endl << endl;
+        system("pause");
+    }
+    if (cantReg>0) {
+        int opc;
+        do {
+            system("cls");
+            cout << "- Como desea Visualizar los Registros? " << endl;
+            cout << " 1) por ID " << endl;
+            cout << " 2) Por Precio " << endl;
+            cout << " 0) Regresar " << endl;
+            cout << "- Seleccione una opcion: ";
+            opc = validarInt();
+            system("cls");
+            switch (opc){
+            case 1: listarPorId();
+                break;
+            case 2: listarPorPrecio();
+                break;
+            case 0:
+                break;
+            default:cout << endl << "* Opcion Incorrecta! *" << endl << endl;
+                break;
             }
+        } while (opc != 0);
+       
+    }
+    cout << endl;
+}
+
+void VehiculosManager::listarPorId() {
+    int cantReg = _vehiculosArchivo.contarRegistros();
+    Vehiculo reg;
+    cout << left;
+    cout << setw(26) << " " << "- Datos de los Vehiculos -" << endl;
+    cout << "-----------------------------------------------------------------------------------" << endl;
+    cout << setw(4) << "ID ";
+    cout << setw(10) << "Marca ";
+    cout << setw(14) << "Modelo ";
+    cout << setw(12) << "Version ";
+    cout << setw(10) << "Color ";
+    cout << setw(8) << "Año ";
+    cout << setw(8) << "Stock ";
+    cout << setw(20) << "Precio por Unidad ";
+    cout << endl;
+    for (int i = 0; i < cantReg; i++) {
+        reg = _vehiculosArchivo.leerRegistro(i);
+        if (reg.getEstado() == true) {
+            mostrarVehiculo(reg);
+        }
+    }
+    cout << endl;
+    system("pause");
+}
+
+void VehiculosManager::listarPorPrecio() {
+    int cantReg = _vehiculosArchivo.contarRegistros();
+    Vehiculo reg,aux;
+    vector<Vehiculo> ordenado;
+    cout << left;
+    cout << setw(26) << " " << "- Datos de los Vehiculos -" << endl;
+    cout << "-----------------------------------------------------------------------------------" << endl;
+    cout << setw(4) << "ID ";
+    cout << setw(10) << "Marca ";
+    cout << setw(14) << "Modelo ";
+    cout << setw(12) << "Version ";
+    cout << setw(10) << "Color ";
+    cout << setw(8) << "Año ";
+    cout << setw(8) << "Stock ";
+    cout << setw(20) << "Precio por Unidad ";
+    cout << endl;
+    for (int i = 0; i < cantReg; i++) {
+        reg = _vehiculosArchivo.leerRegistro(i);
+        ordenado.push_back(reg);
+    }
+    for (int i = 0; i < cantReg; i++) {
+        for (int j = i; j < cantReg; j++) {
+            if (ordenado[i].getPrecioUnidad() > ordenado[j].getPrecioUnidad()){
+                aux = ordenado[i];
+                ordenado[i] = ordenado[j];
+                ordenado[j] = aux;
+            }
+        }
+    }
+    for (int i = 0; i < cantReg; i++) {
+        if (ordenado[i].getEstado() == true) {
+            mostrarVehiculo(ordenado[i]);
         }
     }
     cout << endl;
@@ -192,9 +263,14 @@ void VehiculosManager::listarVehiculos() {
 void VehiculosManager::buscarVehiculo() {
     int cantReg = _vehiculosArchivo.contarRegistros();
     if (cantReg == -1) {
-        cout << endl << "* Error de Archivo *" << endl;
+        cout << endl << "* Error de Archivo *" << endl << endl;
+        system("pause");
     }
-    else {
+    if (cantReg == 0) {
+        cout << endl << "* No Hay Registros para Buscar *" << endl << endl;
+        system("pause");
+    }
+    if (cantReg > 0) {
         int opc;
         do{
         system("cls");
@@ -403,9 +479,12 @@ void VehiculosManager::buscarPorColor() {
 void VehiculosManager::editarVehiculo() {
     int cantReg = _vehiculosArchivo.contarRegistros();
     if (cantReg == -1) {
-        cout << endl << "* Error de Archivo *" << endl;
+        cout << endl << "* Error de Archivo *" << endl << endl;
     }
-    else {
+    if (cantReg == 0) {
+        cout << endl << "* No Hay Registros para Editar *" << endl << endl;
+    }
+    if (cantReg > 0) {
         int id, opc, pos;
         Vehiculo reg;
         cout << "- Ingrese el ID del Vehiculo que desea Editar: ";
@@ -495,7 +574,7 @@ void VehiculosManager::editarVehiculo() {
                     getline(cin, nuevaVersion);
                     cout << "- Nuevo Color: ";
                     nuevoColor = validarStr();
-                    cout << "- Nuevo Anio: ";
+                    cout << "- Nuevo Año: ";
                     nuevoAnio = validarInt();
                     cout << "- Nuevo Stock: ";
                     nuevoStock = validarInt();
@@ -531,9 +610,14 @@ void VehiculosManager::editarVehiculo() {
 void VehiculosManager::eliminarVehiculo() {
     int cantReg = _vehiculosArchivo.contarRegistros();
     if (cantReg == -1) {
-        cout << endl << "* Error de Archivo *" << endl;
+        cout << endl << "* Error de Archivo *" << endl << endl;
+        system("pause");
     }
-    else {
+    if (cantReg == 0) {
+        cout << endl << "* No Hay Registros para Eliminar *" << endl << endl;
+        system("pause");
+    }
+    if (cantReg > 0) {
         int id, pos, opc;
         cout << "- Ingrese el ID del Vehiculo: ";
         id=validarInt();
@@ -583,9 +667,14 @@ void VehiculosManager::eliminarVehiculo() {
 void VehiculosManager::resturarVehiculo() {
     int cantReg = _vehiculosArchivo.contarRegistros();
     if (cantReg == -1) {
-        cout << endl << "* Error de Archivo *" << endl;
+        cout << endl << "* Error de Archivo *" << endl << endl;
+        system("pause");
     }
-    else {
+    if (cantReg == 0) {
+        cout << endl << "* No Hay Registros para Restaurar *" << endl << endl;
+        system("pause");
+    }
+    if (cantReg > 0) {
         int id, pos, opc;
         cout << "- Ingrese el ID del Vehiculo: ";
         id = validarInt();
@@ -636,7 +725,6 @@ void VehiculosManager::realizarBackup() {
     opc=validarInt();
     switch (opc) {
     case 1: system("copy Vehiculos.dat Vehiculos.bkp");
-        cout << "* Backup Realizado con Exito! *" << endl;
     case 2:
         break;
     default:cout << endl << "* Opcion Incorrecta! *" << endl<<endl;
@@ -652,7 +740,6 @@ void VehiculosManager::restaurarBackup() {
     opc=validarInt();
     switch (opc) {
     case 1: system("copy Vehiculos.bkp Vehiculos.dat");
-        cout << "* Restauracion Realizado con Exito! *" << endl;
     case 2:
         break;
     default:cout << endl << "* Opcion Incorrecta! *" << endl<<endl;

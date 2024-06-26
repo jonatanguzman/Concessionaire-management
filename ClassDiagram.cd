@@ -1,93 +1,93 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Venta">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Position X="0.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAIQAQABAFQAAEABAAAAABABIAjMQEFAEEQAACA=</HashCode>
+      <HashCode>ACAAAAIQAQABAFQAAEABAEABABABIAjMQEFAEEQAACA=</HashCode>
       <FileName>Venta.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VentasArchivo">
-    <Position X="2.25" Y="0.5" Width="1.5" />
+    <Position X="2.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgAAAAAAESAAAACAAAEAAAAAAAAAAAAAABIA=</HashCode>
       <FileName>VentasArchivo.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VentasManager">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="4" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAQEQAQgAAAAAQAAAAAAkAAAAQgAAQAAAAAAAAEAA=</HashCode>
+      <HashCode>BMAAQkSCQwAAGAAQCgAIAAEQAAE4gCASAgACBAAAHBA=</HashCode>
       <FileName>VentasManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Fecha">
-    <Position X="6" Y="7.5" Width="1.5" />
+    <Position X="6" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAAAAAAABAEEAAEABAdAAAAAAAAAAIAiAAAAEAA=</HashCode>
+      <HashCode>ACAAAAAAAAAABAEkQAEABQdAAIAAAAAAAIAiAAAAEAA=</HashCode>
       <FileName>Fecha.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Direccion">
-    <Position X="8" Y="7.5" Width="1.5" />
+    <Position X="8" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAQAAAAAQAAAGNACAAAAAAAAQAAAAAAiAIAAGBEAA=</HashCode>
+      <HashCode>AAAAQAAAAAQAAAGNACAABAAAAAQAAAAAAiAIAAGBEAA=</HashCode>
       <FileName>Direccion.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Sucursal">
-    <Position X="6" Y="0.5" Width="1.5" />
+    <Position X="6" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAABAgAAAQhAAAEAAAAgAAIAAgAAIAJgAEAEkIAAAA=</HashCode>
+      <HashCode>AAAABAgAAAQhAAAEAAAAgEAJAAgAAIAJgAEAEkIAAAA=</HashCode>
       <FileName>Sucursal.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Persona">
     <Position X="17.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQEAAAAAAAAAQAAAABwQAJAAAAAAAAAAAEAAoEAIA=</HashCode>
+      <HashCode>AAAQEAAAAAAAAAQAAAABwUAJIAAAAAAAAAAEAAoEAIA=</HashCode>
       <FileName>Persona.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Vendedor">
-    <Position X="16" Y="7.5" Width="1.5" />
+    <Position X="16" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAQQAAAAQBAUCQAAgAABAAAAAIAAAgAEAgAAA=</HashCode>
+      <HashCode>AAAAAAAAQQAAAAQBAUCQAEgBABAAAAAIAAAgAEAgAAA=</HashCode>
       <FileName>Vendedor.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PersonaManager">
-    <Position X="17.5" Y="4.75" Width="1.5" />
+    <Position X="17.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <HashCode>AAAAAADAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
       <FileName>PersonaManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cliente">
-    <Position X="19" Y="7.5" Width="1.5" />
+    <Position X="19" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAgAAQAgAAiAAECAAAAAABgAAIAAAAAAAkAAAAE=</HashCode>
       <FileName>Cliente.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ClienteArchivo">
-    <Position X="21" Y="7.25" Width="1.5" />
+    <Position X="20.75" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAAAEAAAgAAABAAAAAAAAACAAAAAABAA=</HashCode>
       <FileName>ClienteArchivo.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ClienteManager">
-    <Position X="21" Y="10" Width="1.5" />
+    <Position X="20.75" Y="11" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAAAAEAQABAAQAAAAAAgAAAQQAAAACAAAAAIEAAA=</HashCode>
+      <HashCode>BQAAAAAAEAQABAgQCAAAAAgAAAQYAAAADAAABAIECAg=</HashCode>
       <FileName>ClienteManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Configuracion">
     <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IAAIAAAAQBAAAAAAAAAAAAAQAAAKAAAAAAAAAgAQQAE=</HashCode>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAEAAAAIAABAAgAABAAAAAA=</HashCode>
       <FileName>Configuracion.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -99,52 +99,59 @@
     </TypeIdentifier>
   </Class>
   <Class Name="SucursalArchivo">
-    <Position X="7.75" Y="0.5" Width="1.5" />
+    <Position X="7.75" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAIAAAEAAAABAAAAAAAAAABAAAAAAgAAAAABAA=</HashCode>
+      <HashCode>AAAAAAAIAAAEAAAABAAAAAAAAAABAAAAAIgAAAAABAA=</HashCode>
       <FileName>SucursalArchivo.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SucursalManager">
-    <Position X="9.5" Y="0.5" Width="1.5" />
+    <Position X="9.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAAAQAAAAQQAYAAAAAAgAABAYAAAAAIAAAAAAAAQ=</HashCode>
+      <HashCode>BAAAAAAQAAgAQQAYAAIABAQBgBAYAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>SucursalManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Vehiculo">
-    <Position X="0.5" Y="7.5" Width="1.5" />
+    <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BCAIBIIAAAkqYAAAAAAIgAEBEAAAEARIkAAAgwAIAAA=</HashCode>
       <FileName>Vehiculo.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VehiculosArchivo">
-    <Position X="2.25" Y="7.5" Width="1.5" />
+    <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAIAAAAAAAABAAAAAAAAAAACAAgAIgAAAAABAA=</HashCode>
       <FileName>VehiculosArchivo.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VehiculosManager">
-    <Position X="4" Y="7.5" Width="1.5" />
+    <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAEAAAAACIAAAFBAAAAAARAAYhAASAAAIAAAAAwA=</HashCode>
       <FileName>VehiculosManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VendedorArchivo">
-    <Position X="14.25" Y="7.5" Width="1.5" />
+    <Position X="14.25" Y="8.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAMAAAAAAAAAAAAAAQADAAAAAAAAAAAAAAIBAA=</HashCode>
       <FileName>VendedorArchivo.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VendedorManager">
-    <Position X="14.25" Y="10.25" Width="1.5" />
+    <Position X="14.25" Y="11" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>JAAAAAAAQCAAAAIAAAAAAAAAAAAIAAAAAAAAAAEAQAA=</HashCode>
+      <HashCode>JAAAAAgQQCAABAIACAAAgAAAABAKAAAAAAACAQEQQAg=</HashCode>
       <FileName>VendedorManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sistema">
+    <Position X="12.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAEEgAAAAAAIABAAAAAAAIBAAAAAgAABAAAAA=</HashCode>
+      <FileName>Sistema.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

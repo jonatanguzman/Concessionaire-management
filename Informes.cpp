@@ -288,12 +288,20 @@ void Informes::ventasXVendedoresMensual()
     VendedorArchivo va;
     VentasArchivo vs;
     VentasManager vm;
+    Fecha f;
 
     int cantidadVendedor = va.ContarRegistro();
     int cantidadVentas = vs.contarVentas();
 
-    cout << "Ingrese el año a revisar: ";
-    cin >> anio;
+    do {
+        cout << "Ingrese año a revisar: ";
+        cin >> anio;
+
+        if (anio > f.obtenerAnioActual()) {
+            cout << "Año no valido." << endl << endl;
+        }
+
+    } while (anio > f.obtenerAnioActual());
     cout << "Ingrese el mes a revisar: ";
     cin >> mes;
     system("cls");
@@ -325,6 +333,66 @@ void Informes::ventasXVendedoresMensual()
             }
         }
 
+        Vendedor* vendedores = new Vendedor[cantidadVendedor];
+        if (vendedores == nullptr)
+        {
+            return;
+        }
+
+        int* cantidades = new int[cantidadVendedor];
+        if (cantidades == nullptr)
+        {
+            return;
+        }
+
+        double* recaudaciones = new double[cantidadVendedor];
+        if (recaudaciones == nullptr)
+        {
+            return;
+        }
+        for (int i = 0; i < cantidadVendedor; i++)
+        {
+            vendedores[i] = va.leerRegistro(i);
+            cantidades[i] = 0;
+            recaudaciones[i] = 0.0;
+        }
+
+        for (int i = 0; i < cantidadVendedor; i++)
+        {
+            for (int j = 0; j < ventaRealizada; j++)
+            {
+                if (vecVenta[j].getNroLegajo() == vendedores[i].getNroLegajo())
+                {
+                    recaudaciones[i] += vecVenta[j].getTotalVenta();
+                    cantidades[i]++;
+                }
+            }
+        }
+
+        for (int i = 0; i < cantidadVendedor - 1; i++)
+        {
+            for (int j = 0; j < cantidadVendedor - i - 1; j++)
+            {
+                if (cantidades[j] < cantidades[j + 1])
+                {
+                    // Intercambiar cantidades
+                    int auxVenta = cantidades[j];
+                    cantidades[j] = cantidades[j + 1];
+                    cantidades[j + 1] = auxVenta;
+
+                    // Intercambiar recaudaciones
+                    double auxMonto = recaudaciones[j];
+                    recaudaciones[j] = recaudaciones[j + 1];
+                    recaudaciones[j + 1] = auxMonto;
+
+                    // Intercambiar vendedores
+                    Vendedor auxVendedor = vendedores[j];
+                    vendedores[j] = vendedores[j + 1];
+                    vendedores[j + 1] = auxVendedor;
+                }
+            }
+        }
+
         cout << "** INFORME MENSUAL DE VENTAS POR VENDEDOR ** " << endl << endl;
         cout << "Año: " << anio << endl;
         cout << "Mes: " << mes << endl << endl;
@@ -337,32 +405,27 @@ void Informes::ventasXVendedoresMensual()
 
         for (int i = 0; i < cantidadVendedor; i++)
         {
-            vendedor = va.leerRegistro(i);
-            double recaudacion = 0;
-            int cantidad = 0;
-            for (int j = 0; j < ventaRealizada; j++)
+            if (cantidades[i] > 0)
             {
-                if (vecVenta[j].getNroLegajo() == vendedor.getNroLegajo())
-                {
-                    recaudacion += vecVenta[j].getTotalVenta();
-                    cantidad++;
-                }
-            }
-            if (recaudacion > 0)
-            {
-                cout << setw(22) << vendedor.getApellidoNombre();
-                cout << setw(12) << cantidad;
-                cout << "$ " << setw(20) << vm.formatearNumero(recaudacion);
+                cout << setw(22) << vendedores[i].getApellidoNombre();
+                cout << setw(12) << cantidades[i];
+                cout << "$ " << setw(20) << vm.formatearNumero(recaudaciones[i]);
                 cout << endl;
             }
         }
         cout << endl << endl;
+
+        delete[] vecVenta;
+        delete[] vendedores;
+        delete[] cantidades;
+        delete[] recaudaciones;
     }
     else
     {
         cout << "No se encontraron ventas en el mes y año ingresado" << endl;
     }
 }
+
 
 //5
 void Informes::ventasXSucursalAnual()
@@ -603,6 +666,7 @@ void Informes::ventasTodasLasSucursalesAnual()
 void Informes::rankingVentasXModelo()
 {
     int anio, cantVen, cantVeh;
+    bool sinVentas=true;
 
     VentasArchivo archiVen("Ventas.dat");
     Venta venReg;
@@ -613,40 +677,66 @@ void Informes::rankingVentasXModelo()
     cantVeh = archiVeh.contarRegistros();
 
     vector<int> ventas(cantVeh, 0);
-    vector<string> marca(cantVeh),modelo(cantVeh);
+    vector<string> marca(cantVeh);
+    vector<string> modelo(cantVeh);
 
     cout << "- Ranking Anual de Ventas por Modelo -" << endl;
     cout << "---------------------------------------" << endl;
     cout << "Ingrese el Año que desea Consultar: ";
     cin >> anio;
-    system("cls");
-    cout << "- Ranking Anual de Ventas por Modelo -" << endl;
-    cout << "---------------------------------------" << endl;
-    cout << "------------- Año: " << anio << " -------------" << endl;
-    cout << left;
-    cout << setw(10) << "Marca";
-    cout << setw(15) << "Modelo";
-    cout << setw(10) << "Cantidad";
-    cout << endl;
+    //anio=validarInt();
     for (int i = 0; i < cantVen; i++) {
         venReg = archiVen.leerVenta(i);
         if (venReg.getFechaVenta().getAnio() == anio) {
             ventas[venReg.getIdVehiculo() - 1] += 1;
+            sinVentas = false;
             for (int j = 0; j < cantVeh; j++) {
                 vehReg = archiVeh.leerRegistro(j);
                 if (venReg.getIdVehiculo() == vehReg.getIdVehiculo()) {
                     marca[venReg.getIdVehiculo() - 1] = vehReg.getMarca();
-                    modelo[vehReg.getIdVehiculo() - 1] = vehReg.getModelo();
+                    modelo[venReg.getIdVehiculo()-1] = vehReg.getModelo();
                 }
             }
         }
     }
-    for (int j = 0; j < cantVeh; j++) {
-        if (ventas[j] > 0) {
-            cout << setw(10) << marca[j];
-            cout << setw(15) << modelo[j];
-            cout << setw(10) << ventas[j];
-            cout << endl;
+    if (sinVentas) {
+        cout << endl << "* No existen Registros de Ventas para ese Año *" << endl;
+    }
+    else {
+        for (int i = 0; i < cantVeh - 1; ++i) {
+            for (int j = 0; j < cantVeh - i - 1; ++j) {
+                if (ventas[j] < ventas[j + 1]) {
+                    // Intercambiar ventas
+                    int auxVentas = ventas[j];
+                    ventas[j] = ventas[j + 1];
+                    ventas[j + 1] = auxVentas;
+                    // Intercambiar marca
+                    string auxMarca = marca[j];
+                    marca[j] = marca[j + 1];
+                    marca[j + 1] = auxMarca;
+                    // Intercambiar modelo
+                    string auxModelo = modelo[j];
+                    modelo[j] = modelo[j + 1];
+                    modelo[j + 1] = auxModelo;
+                }
+            }
+        }
+        system("cls");
+        cout << "- Ranking Anual de Ventas por Modelo -" << endl;
+        cout << "--------------------------------------" << endl;
+        cout << "------------- Año: " << anio << " --------------" << endl;
+        cout << left;
+        cout << setw(12) << "Marca";
+        cout << setw(15) << "Modelo";
+        cout << setw(10) << "Cantidad";
+        cout << endl;
+        for (int j = 0; j < cantVeh; j++) {
+            if (ventas[j] > 0) {
+                cout << setw(12) << marca[j];
+                cout << setw(18) << modelo[j];
+                cout << setw(10) << ventas[j];
+                cout << endl;
+            }
         }
     }
     cout << endl;
