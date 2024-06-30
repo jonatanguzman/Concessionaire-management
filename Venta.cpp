@@ -1,19 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS 
 #include <iostream>
 #include "Venta.h"
+#include "FuncionesGenerales.h"
 using namespace std;
 
-Venta::Venta()
+//Constructores
+
+Venta::Venta() : _fechaVenta()
 {
-    _idVenta = 0;
-    _fechaVenta = Fecha();
-    _dniCliente = 0;
-    _idSucursal = 0;
-    _nroLegajo = 0;
-    _idVehiculo = 0;
-    _gastosAdm = 0;
-    _totalVenta = 0;
-    _eliminado = 0;
+    setIdVenta(999);
+    setDniCliente(1111111);
+    setIdSucursal(999999);
+    setNroLegajo(0);
+    setIdVehiculo(0);
+    setGastosAdm(0);
+    setTotalVentas(0);
+    setEliminado(false);
 }
 
 Venta::Venta(int idVenta, Fecha fechaVenta, long long dni, int idSucursal, int nroLegajo, int idVehiculo, float gastos, double total, bool eliminado)
@@ -22,13 +24,14 @@ Venta::Venta(int idVenta, Fecha fechaVenta, long long dni, int idSucursal, int n
     setFechaVenta(fechaVenta);
     setDniCliente(dni);
     setIdSucursal(idSucursal);
-    _nroLegajo = nroLegajo;
-    _idVehiculo = idVehiculo;
-    _gastosAdm = gastos;
-    _totalVenta = total;
-    _eliminado = eliminado;
+    setNroLegajo(nroLegajo);
+    setIdVehiculo(idVehiculo);
+    setGastosAdm(gastos);
+    setTotalVentas(total);
+    setEliminado(eliminado);
 
 }
+
 
 //getters
 
@@ -79,14 +82,14 @@ bool Venta::getEliminado()
 
 //setters
 
-void Venta::setIdVenta(int id) // hay que hacer validacion para que sea unico
+void Venta::setIdVenta(int id) 
 {
-    if (id > 0) {
+    if (id >= 0) {
         _idVenta = id; 
     }
     else {
-        cout << "Id de Venta incorrecto. Intente nuevamente:" << endl;
-        cin >> id;
+        cout << "Id de Venta incorrecto. Intente nuevamente." << endl;
+        id = validarInt("ID de venta: ");
         this->setIdVenta(id);
     }
 }
@@ -101,8 +104,8 @@ void Venta::setDniCliente(long long dni)
     while (!validar(dni)) {
         cin.clear();//limpia el estado de error
         cin.ignore(numeric_limits<long long>::max(), '\n');
-        cout << "DNI no valido. Intente nuevamente: " << endl;
-        cin >> dni;
+        cout << "DNI no valido. Intente nuevamente. " << endl;
+        dni = validarLong("* Ingrese DNI del Cliente: ");
     }
 
     _dniCliente = dni;
@@ -111,12 +114,12 @@ void Venta::setDniCliente(long long dni)
 
 void Venta::setIdSucursal(int id) //se tiene que hacer validacion para que sea una sucursal existente
 {
-    if (id > 0) {
+    if (id >= 0) {
         _idSucursal = id;
     }
     else {
-        cout << "Id de Sucursal incorrecto. Intente nuevamente:" << endl;
-        cin >> id;
+        cout << "Id de Sucursal incorrecto. Intente nuevamente." << endl;
+        id = validarInt("* Ingrese ID de Sucursal: ");
         this->setIdSucursal(id);
     }
 }
@@ -133,7 +136,14 @@ void Venta::setIdVehiculo(int id) //se tiene que hacer validacion para que sea u
 
 void Venta::setGastosAdm(float gastos)
 {
-    _gastosAdm = gastos;
+    if (gastos >= 0) {
+        _gastosAdm = gastos;
+    }
+    else {
+        cout << "* Los Gastos Administrativos No Pueden Ser Negativos *" << endl;
+        gastos = pedirNumeroFloat("* Ingrese Gastos Administrativos: $");
+        this->setGastosAdm(gastos);
+    }
 }
 
 void Venta::setTotalVentas(double total)
@@ -150,6 +160,8 @@ void Venta::setEliminado(bool e)
 {
     _eliminado = e;
 }
+
+//Funciones
 
 int Venta::contarDigitos(long long num) {
     int contador = 0;

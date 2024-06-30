@@ -4,73 +4,140 @@
 #include <vector>
 #include <locale>
 #include "ClienteManager.h"
+#include "FuncionesGenerales.h"
+#include "Sistema.h"
+#include "rlutil.h"
 using namespace std;
 
 ClienteManager::ClienteManager() : _archivo("Clientes.dat")
 {
 }
 
+void showItemC(const char* text, int posx, int posy, bool selected)
+{
+
+    if (selected) {
+        rlutil::setBackgroundColor(rlutil::COLOR::MAGENTA);
+        rlutil::locate(posx - 3, posy);
+        std::cout << " " << text << " " << std::endl;
+
+    }
+    else {
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::locate(posx - 3, posy);
+        std::cout << "   " << text << "   " << std::endl;
+    }
+
+    rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+}
+
+enum Opciones {
+    Opcion1 = 0,
+    Opcion2 = 1,
+    Opcion3 = 2,
+    Opcion4 = 3,
+    Opcion5 = 4,
+    Opcion6 = 5,
+    Opcion7 = 6,
+    Opcion8 = 7,
+    Salir = 8
+};
+
 void ClienteManager::Menu()
 {
-    int opcion;
+    Sistema programa;
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        system("cls");
-        cout << "--- Menu Clientes ---" << endl;
-        cout << "----------------------" << endl;
-        cout << "1. Cargar Cliente " << endl;
-        cout << "2. Listar Clientes " << endl;
-        cout << "3. Buscador de Clientes " << endl;
-        cout << "4. Editar Cliente " << endl;
-        cout << "5. Borrar Cliente " << endl;
-        cout << "6. Crear backup " << endl;
-        cout << "7. Restaurar backup " << endl;
+        rlutil::cls();
 
-        cout << endl;
-        cout << "0. Regresar al menu anterior " << endl;
-        cout << "----------------------" << endl;
-        cout << "OPCION: ";
-        cin >> opcion;
-        system("cls");
 
-        switch (opcion) {
-        case 1:
-            agregarCliente();
-            system("pause");
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemC("--- MENU CLIENTES ---", 50, 2, false);
+
+        showItemC("Cargar ", 53, 5, y == Opcion1);
+        showItemC("Listar Clientes ", 53, 6, y == Opcion2);
+        showItemC("Buscador de Clientes ", 53, 7, y == Opcion3);
+        showItemC("Editar información ", 53, 8, y == Opcion4);
+        showItemC("Borrar ", 53, 9, y == Opcion5);
+        showItemC("Crear backup ", 53, 10, y == Opcion6);
+        showItemC("Restaurar backup ", 53, 11, y == Opcion7);
+        showItemC("Regresar al Menu Principal ", 53, 15, y == Opcion8);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
             break;
-
-        case 2:
-            menuListado();
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 8) {
+                y = 8;
+            }
             break;
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1:
+                rlutil::cls();
+                agregarCliente();
+                system("pause");
+                break;
+            case Opcion2:
+                rlutil::cls();
+                menuListado();
+                system("pause");
+                break;
+            case Opcion3:
+                rlutil::cls();
+                buscadorDeClientes();
+                system("pause");
+                break;
+            case Opcion4:
+                rlutil::cls();
+                editarCliente();
+                system("pause");
+                break;
+            case Opcion5:
+                rlutil::cls();
+                borrarCliente();
+                system("pause");
+                break;
+            case Opcion6:
+                rlutil::cls();
+                backupArchivo();
+                system("pause");
+                break;
+            case Opcion7:
+                rlutil::cls();
+                restaurarBackup();
+                system("pause");
+                break;
+            case Opcion8:
+                programa.Menu();
+                break;
+            }
 
-        case 3:
-            buscadorDeClientes();
-            system("pause");
-            break;
 
-        case 4:
-            editarCliente();
-            system("pause");
-            break;
-
-        case 5:
-            borrarCliente();
-            system("pause");
-            break;
-
-        case 6:
-            backupArchivo();
-            system("pause");
-            break;
-        case 7:
-            restaurarBackup();
-            system("pause");
-            break;
-
-        case 0:
-
-            break;
         }
-    } while (opcion != 0);
+
+
+    }
+
+    while (op != 0);
+    system("pause");
+
+    return;
 }
 
 Cliente ClienteManager::crearCliente()
@@ -78,24 +145,22 @@ Cliente ClienteManager::crearCliente()
     string email, tel;
     Direccion d;
     Cliente reg;
-    char opc;
-    cout << "------------- Ingreso de nuevo Cliente -------------" << endl;
+    int opc;
+    std::cout << "------------- Ingreso de nuevo Cliente -------------" << endl;
     regreso:
     reg.CargarPersona();
     bool resultado = DniRepetido(reg.getDni());
     if (resultado) {
-        std::cout << "Cliente ya existente. Desea cargar un nuevo cliente? S/N : ";
-        cin >> opc;
+        std::cout << "* Cliente ya existente *";
+        opc = validarInt("Desea cargar un nuevo cliente? (1)Si - (2)No : ");
 
         switch (opc)
         {
-        case 's':
-        case 'S':
+        case 1:
             system("cls");
             goto regreso;
             break;
-        case 'n':
-        case 'N':
+        case 2:
             Menu();
             break;
         
@@ -105,14 +170,12 @@ Cliente ClienteManager::crearCliente()
 
     }
 
-    cin.ignore();
-    cout << "EMAIL: ";
+    std::cout << "EMAIL: ";
     getline(cin, email);
     reg.setEmail(email);
-    cout << "TELEFONO: ";
-    getline(cin, tel);
+    tel = validarStringNumerico("TELEFONO: ");
     reg.setTelefono(tel);
-    cout << "DIRECCION: " << endl;
+    std::cout << "DIRECCION: " << endl;
     d.Cargar();
     reg.setDireccion(d);
     reg.setEliminado(false);
@@ -126,16 +189,14 @@ Cliente ClienteManager::crearCliente(long long dni)
     Direccion d;
     Cliente reg;
     char opc;
-    cout << "------------- Ingreso de nuevo Cliente -------------" << endl;
+    std::cout << "------------- Ingreso de nuevo Cliente -------------" << endl;
     reg.CargarPersona(dni);
-    cin.ignore();
-    cout << "EMAIL: ";
+    std::cout << "EMAIL: ";
     getline(cin, email);
     reg.setEmail(email);
-    cout << "TELEFONO: ";
-    getline(cin, tel);
+    tel = validarStringNumerico("TELEFONO: ");
     reg.setTelefono(tel);
-    cout << "DIRECCION: " << endl;
+    std::cout << "DIRECCION: " << endl;
     d.Cargar();
     reg.setDireccion(d);
     reg.setEliminado(false);
@@ -147,70 +208,104 @@ Cliente ClienteManager::crearCliente(long long dni)
 void ClienteManager::mostrarCliente(Cliente reg)
 {
     reg.MostrarPersona();
-    cout << endl;
-    cout << "EMAIL: " << reg.getEmail() << endl;
-    cout << "TELEFONO: " << reg.getTelefono() << endl;
-    cout << "DIRECCION: " << reg.getDireccion().toString();
+    std::cout << endl;
+    std::cout << "EMAIL: " << reg.getEmail() << endl;
+    std::cout << "TELEFONO: " << reg.getTelefono() << endl;
+    std::cout << "DIRECCION: " << reg.getDireccion().toString();
 }
 
 void ClienteManager::mostrarClienteEnLinea(Cliente reg) 
 {
     reg.MostrarPersonaEnLinea();
-    cout << setw(33) << reg.getEmail();
-    cout << setw(20) << reg.getTelefono();
-    cout << setw(30) << reg.getDireccion().toString();
-    cout << endl;
+    std::cout << setw(33) << reg.getEmail();
+    std::cout << setw(20) << reg.getTelefono();
+    std::cout << setw(30) << reg.getDireccion().toString();
+    std::cout << endl;
 }
 
 void ClienteManager::agregarCliente()
 {
     if (_archivo.guardarCliente(crearCliente())) {
-        cout << "El cliente se guardó correctamente." << endl;
+        std::cout << "El cliente se guardó correctamente." << endl;
     }
     else {
-        cout << "No se pudo guardar el cliente." << endl;
+        std::cout << "No se pudo guardar el cliente." << endl;
     }
 }
 
 void ClienteManager::encabezadoClientes()
 {
-    cout << left;
-    cout << setw(55) << " " << "* Listado de Clientes *" << endl;
-    cout << "-------------------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
-    cout << setw(14) << "DNI";
-    cout << setw(20) << "Nombre ";
-    cout << setw(20) << "Apellido ";
-    cout << setw(23) << "Fecha de Nacimiento ";
-    cout << setw(33) << "Email ";
-    cout << setw(20) << "Telefono ";
-    cout << setw(30) << "Direccion ";
-    cout << endl;
+    std::cout << left;
+    std::cout << setw(55) << " " << "* Listado de Clientes *" << endl;
+    std::cout << "-------------------------------------------------------------------------------------------------------------------------------------------------------------------" << endl;
+    std::cout << setw(14) << "DNI";
+    std::cout << setw(20) << "Nombre ";
+    std::cout << setw(20) << "Apellido ";
+    std::cout << setw(23) << "Fecha de Nacimiento ";
+    std::cout << setw(33) << "Email ";
+    std::cout << setw(20) << "Telefono ";
+    std::cout << setw(30) << "Direccion ";
+    std::cout << endl;
 }
+
+enum OpcionesCL {
+    Opcion1CL = 0,
+    Opcion2CL = 1,
+    Opcion3CL = 2
+};
+
 
 void ClienteManager::menuListado()
 {
-    int opc;
-    cout << "Como desea ordenar el listado de Clientes?" << endl;
-    cout << "(1) por orden de Carga o (2) por Apellido " << endl;
-    cin >> opc;
-    cin.ignore();
-    cout << endl;
 
-    switch (opc)
-    {
-    case 1:
-        listarClientes();
-        system("pause");
-        break;
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
 
-    case 2:
-        listarClientesXApellido();
-        system("pause");
-        break;
+    do {
+        rlutil::cls();
 
-    default:
-        break;
-    }
+        showItemC("- Como desea ordenar el listado de Clientes? -", 50, 2, false);
+        showItemC("Ordenar por carga", 53, 5, y == Opcion1CL);
+        showItemC("Ordenar por apellido", 53, 6, y == Opcion2CL);
+        showItemC("Regresar al Menu Clientes", 53, 9, y == Opcion3CL);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 2) {
+                y = 2;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1CL:
+                rlutil::cls();
+                listarClientes();
+                system("pause");
+                break;
+            case Opcion2CL:
+                rlutil::cls();
+                listarClientesXApellido();
+                system("pause");
+                break;
+            case Opcion3CL:
+                rlutil::cls();
+                Menu();
+                break;
+            }
+        }    
+    } while (op != 0);
 }
 
 void ClienteManager::listarClientes() //por oden de carga
@@ -238,7 +333,7 @@ void ClienteManager::listarClientesXApellido()
     vector <Cliente> vec;
 
     if (cantidad == 0) {
-        cout << "* No hay Clientes para mostrar *" << endl;
+        std::cout << "* No hay Clientes para mostrar *" << endl;
     }
     else {
         encabezadoClientes();
@@ -252,7 +347,7 @@ void ClienteManager::listarClientesXApellido()
                 mostrarClienteEnLinea(vec[i]);
             }
         }
-        cout << endl;
+        std::cout << endl;
 
     }
 }
@@ -299,11 +394,10 @@ int ClienteManager::buscarCliente(long dni)
 
 void ClienteManager::editarCliente()
 {
-    int dni, opcion;
+    long long dni;
+    int opcion;
 
-    cout << "Ingrese DNI del Cliente a editar: ";
-    cin >> dni;
-    cin.ignore();
+    dni = validarLong("Ingrese DNI del Cliente a editar: ");
     cout << endl;
 
     int pos = buscarCliente(dni);
@@ -321,8 +415,8 @@ void ClienteManager::editarCliente()
             cout << "1 - Email" << endl;
             cout << "2 - Telefono" << endl;
             cout << "3 - Direccion" << endl;
-            cin >> opcion;
-            cin.ignore();
+            cout << "Volver al menu anterior" << endl;
+            opcion = validarInt("Opcion: ");
 
             switch (opcion) {
             case 1:
@@ -336,8 +430,7 @@ void ClienteManager::editarCliente()
             case 2:
             {
                 string tel;
-                cout << "Ingrese nuevo telefono: ";
-                getline(cin, tel);
+                tel = validarStringNumerico("Ingrese nuevo telefono: ");
                 reg.setTelefono(tel);
                 break;
             }
@@ -374,6 +467,7 @@ void ClienteManager::editarCliente()
     else {
         cout << "Error al buscar el cliente. Codigo error " << pos << endl;
     }
+    
 }
 
 void ClienteManager::backupArchivo()
@@ -386,10 +480,10 @@ void ClienteManager::backupArchivo()
     int resultado = system(comando.c_str()); 
 
     if (resultado == 0) {
-        cout << endl << "Backup realizado con exito." << endl; 
+        std::cout << endl << "Backup realizado con exito." << endl;
     }
     else {
-        cout << "Hubo un error al copiar el archivo." << endl; 
+        std::cout << "Hubo un error al copiar el archivo." << endl;
     }
 }
 
@@ -403,22 +497,20 @@ void ClienteManager::restaurarBackup()
     int resultado = system(comando.c_str()); 
 
     if (resultado == 0) {
-        cout << endl << "Backup restaurado con exito." << endl; 
+        std::cout << endl << "Backup restaurado con exito." << endl;
     }
     else {
-        cout << "Hubo un error al restaurar el archivo." << endl; 
+        std::cout << "Hubo un error al restaurar el archivo." << endl;
     }
 }
 
 void ClienteManager::borrarCliente()
 {
-    int dni;
-    char opc;
+    long long dni;
+    int opc;
 
-    cout << "Ingrese DNI del Cliente a borrar: ";
-    cin >> dni; 
-    cin.ignore();
-    cout << endl; 
+    dni = validarLong("Ingrese DNI del Cliente a borrar: ");
+    std::cout << endl;
 
     int pos = buscarCliente(dni);
 
@@ -426,22 +518,28 @@ void ClienteManager::borrarCliente()
         Cliente reg;
         reg = _archivo.leerCliente(pos);
 
-        cout << endl << "Cliente a Borrar: " << endl << endl;
+        std::cout << endl << "Cliente a Borrar: " << endl << endl;
         mostrarCliente(reg);
-        cout << endl << endl << "Confirma que desea borrar este Cliente? S/N" << endl;
-        cin >> opc;
+        std::cout << endl;
+        opc = validarInt("Confirma que desea borrar este Cliente? (1)Si - (2)No: ");
 
-        if (opc == 's' || opc == 'S') {
+        if (opc == 1) {
             reg.setEliminado(true);
             bool result = _archivo.sobreescribirCliente(reg, pos);
+            if (result) {
+                std::cout << "* El cliente se ha borrado correctamente *" << endl;
+            }
+            else {
+                std::cout << "* No se pudo eliminar el cliente *" << endl;
+            }
         }
         else {
-            cout << endl << "Se cancelo el borrado del cliente." << endl;
+            std::cout << endl << "* Se cancelo el borrado del cliente *" << endl;
         }
 
     }
     else {
-        cout << "El cliente buscado no existe" << endl;
+        std::cout << "* El cliente buscado no existe *" << endl;
     }
 }
 
@@ -449,30 +547,29 @@ void ClienteManager::buscadorDeClientes()
 {
     int cantReg = _archivo.contarClientes();
     if (cantReg == -1) {
-        cout << endl << "* Error de Archivo *" << endl;
+        std::cout << endl << "* Error de Archivo *" << endl;
     }
     else {
         int pos;
-        long dni;
-        cout << "Ingrese el DNI a buscar: ";
-        cin >> dni;
-        cin.ignore();
-        cout << endl;
+        long long dni;
+        dni = validarLong("Ingrese el DNI a buscar: ");
+        std::cout << endl;
+        
         pos = buscarCliente(dni);
         if (pos == -1) {
-            cout << endl << "* No se Encontraron Clientes con el DNI buscado *" << endl;
+            std::cout << endl << "* No se Encontraron Clientes con el DNI buscado *" << endl;
         }
         if (pos >= 0) {
             Cliente reg = _archivo.leerCliente(pos);
             if (reg.getEliminado() == false) {
                 mostrarCliente(reg);
-                cout << endl;
+                std::cout << endl;
             }
             else {
-                cout << "* El Registro se Encuentra Eliminado *" << endl;
+                std::cout << "* El Registro se Encuentra Eliminado *" << endl;
             }
         }
-        cout << endl;
+        std::cout << endl;
     
     
     }

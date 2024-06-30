@@ -3,14 +3,15 @@
 #include <cstring>
 #include "Sucursal.h"
 #include "SucursalManager.h"
-using namespace std; 
+#include "FuncionesGenerales.h"
+using namespace std;
 
 
 Sucursal::Sucursal() :_direccion("Calle", 0, "Provincia", 0) {
     _idSucursal = 0;
     strcpy(_nombre, "Sucursal");
     strcpy(_telefono, "");
-    _estado = 0; 
+    _estado = 0;
 }
 
 Sucursal::Sucursal(int idSucursal, string nombre, Direccion direccion, string telefono, bool estado) {
@@ -45,10 +46,7 @@ void Sucursal::setIdSucursal(int s) {
     SucursalManager sm;
     while (!validar(s) || sm.validarIDUnico(s)) {
         cin.clear();//limpia el estado de error
-        cin.ignore(numeric_limits<int>::max(), '\n');
-        cout << "ID no valido. Ingrese nuevo ID: ";
-        cin >> s;
-        cin.ignore();
+        s = validarInt("ID no valido. Ingrese nuevo ID: ");
     }
     _idSucursal = s;
 
@@ -73,39 +71,7 @@ void Sucursal::setTelefono(string t) {
 }
 
 void Sucursal::setEstado(bool e) {
-     _estado = e;
-}
-
-void Sucursal::Mostrar()
-{
-	cout << "Id Sucursal #" << _idSucursal << endl;
-	cout << "Nombre: " << _nombre << endl;
-	cout << "Dirección: ";
-	_direccion.MostrarEnLinea();
-	cout << endl;
-	cout << "Telefono: " << _telefono << endl << endl;
-}
-
-void Sucursal::Cargar()
-{
-	int id;
-	string nombre;
-	string telefono;
-	Direccion d;
-
-	cout << "Ingrese Id Sucursal: ";
-	cin >> id;
-	cin.ignore();
-	setIdSucursal(id);
-	cout << "Ingrese Nombre de Sucursal: ";
-	getline(cin, nombre);
-	setNombre(nombre);
-	cout << "Ingrese Dirección: ";
-	d.Cargar();
-	setDireccion(d);
-	cout << "Ingrese Telefono: ";
-	getline(cin, telefono);
-	setTelefono(telefono);
+    _estado = e;
 }
 
 int Sucursal::contarDigitos(int num) {

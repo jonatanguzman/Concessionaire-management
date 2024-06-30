@@ -1,72 +1,132 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS 
 #include "SucursalManager.h"
+#include "FuncionesGenerales.h"
 #include <iostream>
 #include <iomanip>
+#include "Sistema.h"
+#include "rlutil.h"
 using namespace std;
 
 SucursalManager::SucursalManager() : _archivo()
 {
 
 }
+void showItemSucursal(const char* text, int posx, int posy, bool selected)
+{
+
+    if (selected) {
+        rlutil::setBackgroundColor(rlutil::COLOR::CYAN);
+        rlutil::locate(posx - 3, posy);
+        std::cout << " " << text << " " << std::endl;
+
+    }
+    else {
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::locate(posx - 3, posy);
+        std::cout << "   " << text << "   " << std::endl;
+    }
+
+    rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+}
+
+enum Opciones {
+    Opcion1 = 0,
+    Opcion2 = 1,
+    Opcion3 = 2,
+    Opcion4 = 3,
+    Opcion5 = 4,
+    Opcion6 = 5,
+    Opcion7 = 6,
+    Opcion8 = 7,
+};
 
 void SucursalManager::Menu()
 {
-    int opcion;
+    Sistema programa;
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        system("cls");
-        cout << "----- MENU SUCURSAL -----" << endl;
-        cout << "---------------------------- " << endl;
-        cout << endl;
-        cout << "1. Agregar Registro    " << endl;
-        cout << "2. Listar Registros    " << endl;
-        cout << "3. Modificar Registros " << endl;
-        cout << "4. Buscar Sucursal     " << endl;
-        cout << "5. Borrar Sucursal     " << endl;
-        cout << "6. Backup              " << endl;
-        cout << "7. Restaurar backup    ";
 
-        cout << endl;
-        cout << "0. SALIR DEL PROGRAMA " << endl;
-        cout << "---------------------------- " << endl;
-        cout << "OPCION: ";
-        cin >> opcion;
-        system("cls");
+        rlutil::cls();
 
-        switch (opcion) {
-        case 1:
-            agregarRegistro();
-            system("pause");
-            break;
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
 
-        case 2:
-            listarRegistros();
-            system("pause");
-            break;
-        case 3:
-            editarRegistro();
-            system("pause");
-            break;
-        case 4:
-            buscarSucursal();
-            system("pause");
-            break;
-        case 5:
-            bajaLogica();
-            system("pause");
-            break;
-        case 6:
-            backupArchivo();
-            system("pause");
-            break;
-        case 7:
-            restaurarBackup();
-            system("pause");
-            break;
-        case 0:
+        showItemSucursal("--- MENU SUCURSAL ---", 50, 2, false);
+        showItemSucursal("Agregar Sucursal ", 53, 4, y == Opcion1);
+        showItemSucursal("Listar Sucursales ", 53, 5, y == Opcion2);
+        showItemSucursal("Modificar Sucursal ", 53, 6, y == Opcion3);
+        showItemSucursal("Buscar Sucursal ", 53, 7, y == Opcion4);
+        showItemSucursal("Borrar Sucursal ", 53, 8, y == Opcion5);
+        showItemSucursal("Backup ", 53, 9, y == Opcion6);
+        showItemSucursal("Restaurar Backup ", 53, 10, y == Opcion7);
+        showItemSucursal("Regresar al Menu Principal ", 53, 13, y == Opcion8);
 
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
             break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 8) {
+                y = 8;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1:
+                rlutil::cls();
+                agregarRegistro();
+                system("pause");
+                break;
+            case Opcion2:
+                rlutil::cls();
+                listarRegistros();
+                system("pause");
+                break;
+            case Opcion3:
+                rlutil::cls();
+                editarRegistro();
+                system("pause");
+                break;
+            case Opcion4:
+                rlutil::cls();
+                buscarSucursal();
+                system("pause");
+                break;
+            case Opcion5:
+                rlutil::cls();
+                bajaLogica();
+                system("pause");
+                break;
+            case Opcion6:
+                rlutil::cls();
+                backupArchivo();
+                system("pause");
+                break;
+            case Opcion7:
+                rlutil::cls();
+                restaurarBackup();
+                system("pause");
+                break;
+            case Opcion8:
+                rlutil::cls();
+                programa.Menu();
+                break;
+            }
         }
-    } while (opcion != 0);
+    } while (op != 0);
 }
 
 void SucursalManager::salidaEnPantalla()
@@ -81,12 +141,12 @@ void SucursalManager::salidaEnPantalla()
 
 bool SucursalManager::validarIDUnico(int id)
 {
-    Sucursal reg; 
+    Sucursal reg;
 
-    int cant = _archivo.contarRegistro(); 
-    for (int i = 0; i < cant; i++) { 
-        reg = _archivo.leerRegistro(i); 
-        if (reg.getIdSucursal() == id) { 
+    int cant = _archivo.contarRegistro();
+    for (int i = 0; i < cant; i++) {
+        reg = _archivo.leerRegistro(i);
+        if (reg.getIdSucursal() == id) {
             return true;
         }
     }
@@ -104,60 +164,6 @@ void SucursalManager::agregarRegistro()
     }
 }
 
-void SucursalManager::listarRegistros()
-{
-    Sucursal reg;
-    int cant = _archivo.contarRegistro();
-    int opc;
-
-    cout << "** Listado de Sucursales **" << endl;
-    cout << "1 - Listar por ID" << endl;
-    cout << "2 - Listar por Nombre" << endl;
-
-    cout << "Ingrese su opcion: ";
-    cin >> opc;
-
-    switch (opc)
-    {
-    case 1:
-    {
-        salidaEnPantalla();
-
-        for (int i = 0; i < cant; i++) {
-            reg = _archivo.leerRegistro(i);
-            if (reg.getEstado() == false) {
-                mostrarRegistro(reg);
-                cout << endl;
-            }
-        }
-        break;
-    }
-    case 2:
-    {
-        Sucursal* sucursales = new Sucursal[cant];
-        for (int i = 0; i < cant; i++) {
-            reg = _archivo.leerRegistro(i);
-            if (reg.getEstado() == false) {
-                sucursales[i] = reg;
-            }
-        }
-        ordenarNombre(sucursales, cant);
-        salidaEnPantalla();
-        for (int i = 0; i < cant; i++) {
-            if (sucursales[i].getEstado() == false) {
-                mostrarRegistro(sucursales[i]);
-                cout << endl;
-            }
-        }
-        delete[] sucursales;
-        break;
-    }
-    default:
-        break;
-    }
-
-}
-
 void SucursalManager::ordenarNombre(Sucursal obj[], int tam)
 {
     Sucursal aux;
@@ -172,32 +178,203 @@ void SucursalManager::ordenarNombre(Sucursal obj[], int tam)
     }
 }
 
+void SucursalManager::listarPorNombre()
+{
+    int cantidad = _archivo.contarRegistro();
+    Sucursal* vec, reg;
+
+    vec = new Sucursal[cantidad];
+    if (vec == nullptr) {
+        std::cout << "No hay memoria.";
+    }
+
+    if (cantidad == 0) {
+        std::cout << "No hay sucursal para mostrar." << std::endl;
+    }
+    else {
+        salidaEnPantalla();
+        for (int i = 0; i < cantidad; i++) {
+            reg = _archivo.leerRegistro(i);
+            vec[i] = reg;
+        }
+
+        ordenarNombre(vec, cantidad);
+        for (int i = 0; i < cantidad; i++) {
+            if (vec[i].getEstado() == false) {
+                mostrarRegistro(vec[i]);
+                std::cout << std::endl;
+            }
+        }
+        std::cout << std::endl;
+    }
+    delete[]vec;
+}
+
+void SucursalManager::ordenarID(Sucursal obj[], int tam)
+{
+    Sucursal aux;
+    for (int i = 0; i < tam - 1; i++) {
+        for (int j = 0; j < tam - i - 1; j++) {
+            if (obj[j].getIdSucursal() > obj[j + 1].getIdSucursal()) {
+                aux = obj[j];
+                obj[j] = obj[j + 1];
+                obj[j + 1] = aux;
+            }
+        }
+    }
+}
+
+void SucursalManager::listarPorID()
+{
+    int cantidad = _archivo.contarRegistro();
+    Sucursal* vec, reg;
+
+    vec = new Sucursal[cantidad];
+    if (vec == nullptr) {
+        std::cout << "No hay memoria.";
+    }
+
+    if (cantidad == 0) {
+        std::cout << "No hay sucursal para mostrar." << std::endl;
+    }
+    else {
+        salidaEnPantalla();
+        for (int i = 0; i < cantidad; i++) {
+            reg = _archivo.leerRegistro(i);
+            vec[i] = reg;
+        }
+
+        ordenarID(vec, cantidad);
+        for (int i = 0; i < cantidad; i++) {
+            if (vec[i].getEstado() == false) {
+                mostrarRegistro(vec[i]);
+                std::cout << std::endl;
+            }
+        }
+        std::cout << std::endl;
+    }
+    delete[]vec;
+}
+
+enum OpcionesLR {
+    opcion1LR = 0,
+    opcion2LR = 1,
+    opcion3LR = 2,
+};
+
+void SucursalManager::listarRegistros()
+{
+
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
+    do {
+        rlutil::cls();
+
+        showItemSucursal("- Listado de Sucursales -", 53, 2, false);
+        showItemSucursal("Por ID", 53, 4, y == opcion1LR);
+        showItemSucursal("Por Nombre", 53, 5, y == opcion2LR);
+        showItemSucursal("Volver al menu anterior", 53, 8, y == opcion3LR);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 2) {
+                y = 2;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case opcion1LR:
+                rlutil::cls();
+                listarPorID();
+                system("pause");
+                break;
+            case opcion2LR:
+                rlutil::cls();
+                listarPorNombre();
+                system("pause");
+                break;
+            case opcion3LR:
+                rlutil::cls();
+                Menu();
+                break;
+            }
+        }
+    } while (op != 0);
+}
+
+enum OpcionesBS {
+	Opcion1BS = 0,
+	Opcion2BS = 1,
+    Opcion3BS = 2,
+};
+
 void SucursalManager::buscarSucursal()
 {
-    int opc;
+    int opc = 1;
+    int y = 0;
+    rlutil::hidecursor();
 
-    cout << "** Busqueda de Sucursales **" << endl;
-    cout << "1 - Buscar por ID" << endl;
-    cout << "2 - Buscar por Nombre" << endl;
+    do {
+        rlutil::cls();
 
-    cout << "Ingrese su opcion: ";
-    cin >> opc;
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
 
-    switch (opc)
-    {
-    case 1:
-    {
-        buscarSucursalID();
-        break;
-    case 2:
-        buscarSucursalNombre();
-        break;
+        showItemSucursal("--- BUSCAR SUCURSAL ---", 50, 2, false);
+        showItemSucursal("Por ID ", 53, 4, y == Opcion1BS);
+        showItemSucursal("Por Nombre ", 53, 5, y == Opcion2BS);
+        showItemSucursal("Regresar al Menu Sucursal ", 53, 8, y == Opcion3BS);
 
-    }
-    default:
-        break;
-    }
-
+        switch (rlutil::getkey()) {
+            case 14: // UP
+			    rlutil::locate(28, 10 + y);
+			    std::cout << " " << std::endl;
+			    y--;
+			    if (y < 0) {
+				    y = 0;
+			    }
+			    break;
+            case 15: // DOWN
+                rlutil::locate(28, 10 + y);
+                std::cout << " " << std::endl;
+                y++;
+                if (y > 2) {
+					y = 2;
+				}
+                break;
+			case 1: // ENTER
+				switch (y) {
+					case Opcion1BS:
+						rlutil::cls();
+						buscarSucursalID();
+						system("pause");
+						break;
+					case Opcion2BS:
+						rlutil::cls();
+						buscarSucursalNombre();
+						system("pause");
+						break;
+					case Opcion3BS:
+						rlutil::cls();
+						Menu();
+						break;
+				}
+		}
+	} while (opc != 0);
 }
 
 void SucursalManager::buscarSucursalID()
@@ -205,12 +382,11 @@ void SucursalManager::buscarSucursalID()
     int id, pos;
     Sucursal reg;
 
-    cout << "Ingrese ID de la Sucursal que desea Buscar " << endl;
-    cin >> id;
-    cin.ignore();
+    id = validarInt("Ingrese ID de la Sucursal que desea Buscar: ");
     cout << endl;
 
     pos = _archivo.buscarPosicion(id);
+    salidaEnPantalla();
 
     if (pos >= 0) {
         reg = _archivo.leerRegistro(pos);
@@ -221,6 +397,8 @@ void SucursalManager::buscarSucursalID()
     else {
         cout << "No se encontro la sucursal." << endl;
     }
+    cout << endl;
+
 }
 
 void SucursalManager::buscarSucursalNombre()
@@ -229,8 +407,7 @@ void SucursalManager::buscarSucursalNombre()
     Sucursal reg;
     int cant = _archivo.contarRegistro();
 
-    cout << "Ingrese Nombre de la Sucursal que desea Buscar " << endl;
-    cin.ignore();
+    cout << "Ingrese Nombre de la Sucursal que desea Buscar: ";
     getline(cin, nombre);
     cout << endl;
 
@@ -249,19 +426,18 @@ void SucursalManager::buscarSucursalNombre()
 
 Sucursal SucursalManager::crearRegistro()
 {
-    Sucursal reg; 
-    int id; 
-    string nombre; 
-    string telefono; 
-    Direccion d; 
+    Sucursal reg;
+    string id;
+    int idSucursal;
+    string nombre;
+    string telefono;
+    Direccion d;
 
-    cout << "---- Cargar Registro ----" << endl; 
-    cout << endl; 
+    cout << "---- Cargar Registro ----" << endl;
+    cout << endl;
 
-    cout << "Ingrese Id Sucursal: ";
-    cin >> id;
-    cin.ignore();
-    reg.setIdSucursal(id); 
+    idSucursal = validarInt("Ingrese Id Sucursal: ");
+    reg.setIdSucursal(idSucursal);
     cout << "Ingrese Nombre de Sucursal: ";
     getline(cin, nombre);
     reg.setNombre(nombre);
@@ -290,9 +466,7 @@ void SucursalManager::editarRegistro()
     int id, pos, opcion;
     Sucursal reg;
 
-    cout << "Ingrese ID de la Sucursal que desea Modificar " << endl;
-    cin >> id;
-    cin.ignore();
+    id = validarInt("Ingrese ID de la Sucursal que desea Modificar: ");
     cout << endl;
 
     pos = _archivo.buscarPosicion(id);
@@ -301,15 +475,15 @@ void SucursalManager::editarRegistro()
         reg = _archivo.leerRegistro(pos);
         if (reg.getEstado() == false) {
             cout << endl << "Sucursal a Modificar: " << endl;
-            reg.Mostrar();
+            mostrarRegistro(reg);
 
             cout << endl;
             cout << "* Que dato desea Editar? " << endl;
             cout << "1 - Nombre" << endl;
             cout << "2 - Direccion" << endl;
             cout << "3 - Telefono" << endl;
-            cin >> opcion;
-            cin.ignore();
+            cout << "Volver al menu anterior" << endl;
+            opcion = validarInt("Opcion: ");
 
             switch (opcion) {
             case 1:
@@ -336,6 +510,8 @@ void SucursalManager::editarRegistro()
                 reg.setTelefono(tel);
                 break;
             }
+            case 0:
+                break;
             default:
                 cout << "Opcion invalida.";
                 break;
@@ -364,9 +540,7 @@ void SucursalManager::bajaLogica()
     int id, pos;
     Sucursal reg;
 
-    cout << "Ingrese ID de la Sucursal que desea dar de baja " << endl;
-    cin >> id;
-    cin.ignore();
+    id = validarInt("Ingrese ID de la Sucursal que desea dar de baja: ");
     cout << endl;
 
     pos = _archivo.buscarPosicion(id);
@@ -426,4 +600,3 @@ void SucursalManager::restaurarBackup()
         cout << "Hubo un error al restaurar el archivo. " << endl;
     }
 }
-

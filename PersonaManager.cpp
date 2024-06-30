@@ -3,6 +3,7 @@
 #include <iomanip>
 
 #include "PersonaManager.h"
+#include "FuncionesGenerales.h"
 
 
 void PersonaManager::CargarPersona() {
@@ -10,10 +11,8 @@ void PersonaManager::CargarPersona() {
     std::string nombre, apellido;
     Fecha fechaN;
 
-    std::cout << "DNI: ";
-    std::cin >> dni;
+    dni = validarLong("DNI: ");
     setDni(dni);
-    std::cin.ignore();
     std::cout << "NOMBRE: ";
     std::getline(std::cin, nombre);
     setNombre(nombre);

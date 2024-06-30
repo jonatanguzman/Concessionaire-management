@@ -1,15 +1,17 @@
 #include <iostream>
 #include <cstring>
 #include <iomanip>
-
 #include "VendedorManager.h"
+#include "FuncionesGenerales.h"
+#include "Sistema.h"
+#include "rlutil.h"
 
 
 VendedorManager::VendedorManager(): _archivo("Vendedores.dat"){
 
 }
 
-void PlanillaVendedor(){
+void VendedorManager::PlanillaVendedor(){
     std::cout<<std::left;
     std::cout<<std::setw(14)<<"DNI ";
     std::cout<<std::setw(20)<< "NOMBRE";
@@ -25,8 +27,9 @@ Vendedor VendedorManager::CrearVendedor(){
     int numLegajo, anioAntiguedad;
     Fecha fechaI;
     Vendedor vendedor;
-    char opc;
+    int opc;
 
+    std::cout << std::left;
     std::cout<<std::setw(60)<<"--- AGREGAR VENDEDOR ---"<<std::endl;
     std::cout<<std::endl;
 
@@ -34,18 +37,15 @@ Vendedor VendedorManager::CrearVendedor(){
     vendedor.CargarPersona();
     bool resultado = DniRepetido(vendedor.getDni());
     if (resultado) {
-        std::cout << "Vendedor ya existente. Desea cargar un nuevo vendedor? S/N : ";
-        std::cin >> opc;
+        opc = validarInt("Vendedor ya existente.Desea cargar un nuevo vendedor? (1)Si - (2)No: ");
 
         switch (opc)
         {
-        case 's':
-        case 'S':
+        case 1:
             system("cls");
             goto regreso;
             break;
-        case 'n':
-        case 'N':
+        case 2:
             Menu();
             break;
 
@@ -55,15 +55,14 @@ Vendedor VendedorManager::CrearVendedor(){
 
     }
 
-    std::cout<<"NUMERO DE LEGAJO: ";
-    std::cin>>numLegajo;
+    numLegajo = validarInt("NUMERO DE LEGAJO: ");
     vendedor.setNroLegajo(numLegajo);
     std::cout<<"FECHA INGRESO: "<<std::endl;
     fechaI.Cargar();
     vendedor.setFechaIngreso(fechaI);
     std::cout<<"ANTIGUEDAD: ";
     anioAntiguedad=vendedor.calcularAntiguedad();
-    std::cout<<anioAntiguedad<<std::endl;
+    std::cout << anioAntiguedad << " años" << std::endl;
     vendedor.setAntiguedad(anioAntiguedad);
     vendedor.setEliminado(false);
     std::cout<<std::endl;
@@ -78,7 +77,7 @@ void VendedorManager::MostrarVendedor(Vendedor vendedor){
     std::cout<<std::left;
     std::cout<<std::setw(10)<<vendedor.getNroLegajo();
     std::cout<<std::setw(20)<<vendedor.getFechaIngreso().toString();
-    std::cout<<std::setw(10)<<vendedor.getAntiguedad();
+    std::cout << std::setw(0) << vendedor.getAntiguedad() << " años"; 
 }
 
 void VendedorManager::AgregarVendedor(){
@@ -89,8 +88,9 @@ void VendedorManager::AgregarVendedor(){
     }
 }
 
-void VendedorManager::ListarVendedor(){
-
+void VendedorManager::ListarVendedor()
+{
+    std::cout << std::left;
     std::cout<<std::setw(60)<<"--- LISTAR TODOS LOS VENDEDORES ---"<<std::endl;
     std::cout<<std::endl;
 
@@ -110,14 +110,16 @@ void VendedorManager::ListarVendedor(){
     std::cout<<std::endl;
 }
 
-void VendedorManager::BuscarVendedor(){
+void VendedorManager::BuscarVendedor()
+{
     int numLegajo, indice;
     Vendedor vendedor;
+
+    std::cout << std::left;
     std::cout<<std::setw(60)<<"--- BUSCAR VENDEDOR ---"<<std::endl;
     std::cout<<std::endl;
 
-    std::cout<<"Ingrese el numero de legajo del vendedor que desea buscar: ";
-    std::cin>>numLegajo;
+    numLegajo = validarInt("Ingrese el numero de legajo del vendedor que desea buscar: ");
     std::cout<<std::endl;
     system("cls");
 
@@ -138,14 +140,34 @@ void VendedorManager::BuscarVendedor(){
     std::cout<<std::endl<<std::endl;
 }
 
-void VendedorManager::EditarVendedor(){
+void showItemVendedor(const char* text, int posx, int posy, bool selected)
+{
+
+    if (selected) {
+        rlutil::setBackgroundColor(rlutil::COLOR::LIGHTRED);
+        rlutil::locate(posx - 3, posy);
+        std::cout << " " << text << " " << std::endl;
+
+    }
+    else {
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::locate(posx - 3, posy);
+        std::cout << "   " << text << "   " << std::endl;
+    }
+
+    rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+}
+
+void VendedorManager::EditarVendedor()
+{
     int legajo;
-    char opcion;
+    int opcion;
+
+    std::cout << std::left;
     std::cout<<std::setw(60)<<"--- EDITAR VENDEDOR ---"<<std::endl;
     std::cout<<std::endl;
 
-    std::cout << "Ingrese Legajo del Cliente a editar: ";
-    std::cin >> legajo;
+    legajo = validarInt("Ingrese Legajo del Vendedor a editar: ");
     std::cout << std::endl;
     system("cls");
 
@@ -161,12 +183,11 @@ void VendedorManager::EditarVendedor(){
         MostrarVendedor(vendedor);
 
         std::cout << std::endl<<std::endl;
-        std::cout << "¿Desea editar la Fecha de Ingreso? S/N" << std::endl;
-        std::cout<<"OPCION: ";
-        std::cin >> opcion;
+        std::cout << "¿Desea editar la Fecha de Ingreso? (1)Si - (2)No: " << std::endl;
+        opcion = validarInt("Opcion: ");
         system("cls");
 
-        if(opcion=='s' || opcion=='S'){
+        if(opcion == 1){
             std::cout<<std::endl;
             Fecha f;
             std::cout << "Ingrese nueva fecha: "<<std::endl;
@@ -191,16 +212,17 @@ void VendedorManager::EditarVendedor(){
 
 }
 
-void VendedorManager::EliminarVendedor(){
+void VendedorManager::EliminarVendedor()
+{
     int numLegajo, indice;
     Vendedor vendedor;
-    char opcion;
+    int opcion;
 
+    std::cout << std::left;
     std::cout<<std::setw(60)<<"--- ELIMINAR VENDEDOR ---"<<std::endl;
     std::cout<<std::endl;
 
-    std::cout<<"Ingrese el numero de Legajo: ";
-    std::cin>>numLegajo;
+    numLegajo = validarInt("Ingrese el numero de Legajo: ");
 
     indice=_archivo.BuscarId(numLegajo);
 
@@ -212,12 +234,11 @@ void VendedorManager::EliminarVendedor(){
         MostrarVendedor(vendedor);
         std::cout<<std::endl<<std::endl;
 
-        std::cout<< "Desea eliminar este vendedor. Confirmar? S/N" << std::endl;
-        std::cout<<"OPCION: ";
-        std::cin >> opcion;
+        std::cout<< "Desea eliminar este vendedor? (1)Si - (2)No: " << std::endl;
+        opcion = validarInt("Opcion: ");
         system("cls");
 
-        if(opcion=='s' || opcion=='S'){
+        if(opcion == 1){ 
             vendedor.setEliminado(true);
 
             if(_archivo.Sobreescribir(indice, vendedor)){
@@ -233,130 +254,126 @@ void VendedorManager::EliminarVendedor(){
     }
 }
 
-void VendedorManager::realizarBackupVendedores() {
-    int opc;
-    std::cout<<std::setw(60)<<"--- REALIZAR BACKUP ---"<<std::endl;
-    std::cout<<std::endl;
-
-    std::cout << "- Desea Relizar Backup del Archivo Vendedores?" << std::endl;
-    std::cout << " (1)SI (2)NO " << std::endl;
-    std::cout << "Selecione una Opcion: ";
-    std::cin >> opc;
-    system("cls");
-    switch (opc) {
-    case 1:
-        system("copy Vendedores.dat Vendedores.bkp");
+void VendedorManager::realizarBackupVendedores()
+{
+    bool resultado = system("copy Vendedores.dat Vendedores.bkp");
+    if (resultado == 0) {
         std::cout << "* Backup Realizado con Exito! *" << std::endl;
-        break;
-    case 2:
-        return;
-    default:
-        std::cout << std::endl << "* Opcion Incorrecta! *" << std::endl;
-        return;
+    }
+    else {
+        std::cout << "* Hubo un error al copiar el archivo *" << std::endl;
     }
 }
 
-void VendedorManager::restaurarBackupVendedores() {
-    int opc;
-    std::cout<<std::setw(60)<<"--- RESTAURAR BACKUP ---"<<std::endl;
-    std::cout<<std::endl;
-
-    std::cout << "- Desea Restaurar el Archivo de Vendedores?" << std::endl;
-    std::cout << " (1)SI (2)NO " << std::endl;
-    std::cout << "Selecione una Opcion: ";
-    std::cin >> opc;
-    system("cls");
-    switch (opc) {
-    case 1:
-        system("copy Vendedores.bkp Vendedores.dat");
+void VendedorManager::restaurarBackupVendedores() 
+{
+    bool resultado = system("copy Vendedores.bkp Vendedores.dat");
+    if (resultado == 0) {
         std::cout << "* Restauracion Realizado con Exito! *" << std::endl;
-        break;
-    case 2:
-        break;
-    default:
-        std::cout << std::endl << "* Opcion Incorrecta! *" << std::endl;
-        return;
+    }
+    else {
+        std::cout << "* Hubo un error al copiar el archivo *" << std::endl;
     }
 }
 
-void VendedorManager::Menu(){
-    int option;
-    system("cls");
-    while(true)
-    {
-        system("cls");
+enum Opciones {
+    Opcion1 = 0,
+    Opcion2 = 1,
+    Opcion3 = 2,
+    Opcion4 = 3,
+    Opcion5 = 4,
+    Opcion6 = 5,
+    Opcion7 = 6,
+    Opcion8 = 7,
+};
 
-        std::cout<<"------ MENU VENDEDOR ------- "<<std::endl;
-        std::cout << "----------------------" << std::endl;
-        std::cout<<"1- AGREGAR VENDEDOR"<<std::endl;
-        std::cout<<"2- LISTAR TODOS LOS VENDEDORES"<<std::endl;
-        std::cout<<"3- BUSCAR VENDEDOR"<<std::endl;
-        std::cout<<"4- EDITAR VENDEDOR"<<std::endl;
-        std::cout<<"5- ELIMINAR VENDEDOR"<<std::endl;
-        std::cout<<"6- BACKUP"<<std::endl;
-        std::cout<<"0- REGRESAR AL MENU ANTERIOR"<<std::endl;
-        std::cout<<"-----------------------------"<<std::endl;
-        std::cout<<"Opcion: ";
-        std::cin>>option;
-        system("cls");
-        switch(option){
-            case 1:
+void VendedorManager::Menu() {
+    Sistema programa;
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
+    do {
+
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemVendedor("--- MENU VENDEDORES ---", 50, 2, false);
+        showItemVendedor("Agregar ", 53, 4, y == Opcion1);
+        showItemVendedor("Listar ", 53, 5, y == Opcion2);
+        showItemVendedor("Buscar ", 53, 6, y == Opcion3);
+        showItemVendedor("Editar ", 53, 7, y == Opcion4);
+        showItemVendedor("Eliminar ", 53, 8, y == Opcion5);
+        showItemVendedor("Crear Backup ", 53, 9, y == Opcion6);
+        showItemVendedor("Restaurar Backup ", 53, 10, y == Opcion7);
+        showItemVendedor("Regresar al Menu Principal ", 53, 13, y == Opcion8);
+
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 8) {
+                y = 8;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1:
+                rlutil::cls();
                 AgregarVendedor();
                 system("pause");
                 break;
-            case 2:
-               ListarApellido();
+            case Opcion2:
+                rlutil::cls();
+                menuListar();
                 system("pause");
                 break;
-            case 3:
+            case Opcion3:
+                rlutil::cls();
                 BuscarVendedor();
                 system("pause");
                 break;
-            case 4:
+            case Opcion4:
+                rlutil::cls();
                 EditarVendedor();
                 system("pause");
                 break;
-            case 5:
+            case Opcion5:
+                rlutil::cls();
                 EliminarVendedor();
                 system("pause");
                 break;
-            case 6:
-                int  opc2;
-                while(true){
-
-                    system("cls");
-                    std::cout<<"------ MENU BACKUP ------- "<<std::endl;
-                    std::cout<<"1- REALIZAR BACKUP VENDEDORES"<<std::endl;
-                    std::cout<<"2- RESTAURAR BUCKUP VENDEDORES"<<std::endl;
-                    std::cout<<"3- VOLVER AL MENU PRINCIPAL"<<std::endl;
-                    std::cout<<"OPCION: ";
-                    std::cin>>opc2;
-                    system("cls");
-
-                    switch(opc2){
-                        case 1:
-                            realizarBackupVendedores();
-                            system("pause");
-                            break;
-                        case 2:
-                            restaurarBackupVendedores();
-                            system("pause");
-                            break;
-                        case 3:
-                            break;
-                    }
-                    if(opc2==3){// Salir del bucle del submenú si se elige la opción 3
-                        break;
-                    }
-                }
+            case Opcion6:
+                rlutil::cls();
+                realizarBackupVendedores();
+                system("pause");
                 break;
-            case 0:
-            return;
+            case Opcion7:
+                rlutil::cls();
+                restaurarBackupVendedores();
+                system("pause");
+                break;
+            case Opcion8:
+                programa.Menu();
+                break;
+            }
         }
-    }
-
+    } while (op != 0);
 }
-
+  
 bool VendedorManager::LegajoRepetido(int idLegajo) {
     Vendedor registro;
     int cantidad = _archivo.ContarRegistro();
@@ -386,14 +403,6 @@ bool VendedorManager::DniRepetido(long long idPersona) {
     return false;
 }
 
-bool creciente(int num, int num2) {
-    return num < num2;
-}
-
-bool decreciente(int num, int num2) {
-    return num > num2;
-}
-
 void VendedorManager::OrdenarPorAntiguedad(Vendedor* obj, int cantidad, bool criterio(int, int)) {
     Vendedor aux;
 
@@ -408,7 +417,8 @@ void VendedorManager::OrdenarPorAntiguedad(Vendedor* obj, int cantidad, bool cri
     }
 }
 
-void VendedorManager::ListarAntiguedad() {
+void VendedorManager::ListarAntiguedad() 
+{
     int cantidad = _archivo.ContarRegistro();
     Vendedor* vec, reg;
 
@@ -440,15 +450,8 @@ void VendedorManager::ListarAntiguedad() {
     delete[]vec;
 }
 
-bool creciente(std::string  n, std::string m) {
-    return n < m;
-}
-
-bool decreciente(std::string n, std::string m) {
-    return n > m;
-}
-
-void VendedorManager::OrdenarPorApellido(Vendedor* obj, int cantidad, bool criterio(std::string, std::string)) {
+void VendedorManager::OrdenarPorApellido(Vendedor* obj, int cantidad, bool criterio(std::string, std::string)) 
+{
     Vendedor aux;
 
     for (int i = 0; i < cantidad; i++) {
@@ -462,7 +465,8 @@ void VendedorManager::OrdenarPorApellido(Vendedor* obj, int cantidad, bool crite
     }
 }
 
-void VendedorManager::ListarApellido() {
+void VendedorManager::ListarApellido() 
+{
     int cantidad = _archivo.ContarRegistro();
     Vendedor* vec, reg;
 
@@ -494,7 +498,77 @@ void VendedorManager::ListarApellido() {
     delete[]vec;
 }
 
-void VendedorManager::MostrarPantalla() {
+
+enum OpcionesListar {
+    Opcion1L = 0,
+    Opcion2L = 1,
+    Opcion3L = 2,
+};
+
+void VendedorManager::menuListar()
+{
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
+    while (true) {
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemVendedor("Como desea ordenar el listado de Vendedores?", 59, 8, false);
+
+        showItemVendedor("Por Antiguedad", 60, 12, y == Opcion1L);
+        showItemVendedor("Por Apellido ", 60, 14, y == Opcion2L);
+        showItemVendedor("Volver al menu anterior ", 60, 16, y == Opcion3L);
+
+
+        switch (rlutil::getkey())
+        {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 3) {
+                y = 3;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1L:
+                rlutil::cls();
+                ListarAntiguedad();
+                system("pause");
+                break;
+            case Opcion2L:
+                rlutil::cls();
+                ListarApellido();
+                system("pause");
+                break;
+            case Opcion3L:
+                rlutil::cls();
+                Menu();
+                break;
+            }
+        }
+    }
+    system("pause");
+
+    return;
+}
+
+void VendedorManager::MostrarPantalla() 
+{
     std::cout << std::left;
     std::cout << std::setw(14) << "DNI ";
     std::cout << std::setw(20) << "NOMBRE";

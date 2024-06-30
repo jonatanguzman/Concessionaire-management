@@ -2,6 +2,7 @@
 #include <iostream>
 #include <locale>
 #include "Sistema.h"
+#include "FuncionesGenerales.h"
 
 using namespace std;
 

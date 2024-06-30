@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Fecha.h"
+#include "FuncionesGenerales.h"
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -23,11 +24,9 @@ void Fecha::setDia(int d) {
         _dia = d;
     }
     else {
-        cin.ignore();
-        cout << "Dia no valido. Intente nuevamente:" << endl;
-        cin >> d;
+        cout << "Dia no valido. Intente nuevamente." << endl;
+        d = validarInt("Dia: ");
         this->setDia(d);
-        cin.ignore();
     }
 }
 
@@ -36,8 +35,8 @@ void Fecha::setMes(int m) {
         _mes = m;
     }
     else {
-        cout << "Mes no valido. Intente nuevamente:" << endl;
-        cin >> m;
+        cout << "Mes no valido. Intente nuevamente." << endl;
+        m = validarInt("Mes: ");
         this->setMes(m);
     }
 }
@@ -47,10 +46,9 @@ void Fecha::setAnio(int a) {
         _anio = a;
     }
     else {
-        cout << "Año no valido. Intente nuevamente:" << endl;
-        cin >> a;
+        cout << "Año no valido. Intente nuevamente." << endl;
+        a = validarInt("Año: ");
         this->setAnio(a);
-        cin.ignore();
     }
 }
 
@@ -62,14 +60,13 @@ int Fecha::getAnio() { return _anio; }
 
 void Fecha::Cargar() {
     int dia, mes, anio;
-    cout << "Dia: ";
-    cin >> dia;
-    cin.ignore();
-    cout << "Mes: ";
-    cin >> mes;
-    cin.ignore();
-    cout << "Año: ";
-    cin >> anio;
+    dia = validarInt("Dia: ");
+    setDia(dia);
+    mes = validarInt("Mes: ");
+    setMes(mes);
+    anio = validarInt("Año: ");
+    setAnio(anio); 
+
     time_t now = time(0);
     tm* f = localtime(&now);
     /// Verifica si la fecha es anterior o igual a la fecha actual
@@ -77,11 +74,7 @@ void Fecha::Cargar() {
         cout << "Fecha No Valida, Ingresela Nuevamente " << endl;
         Fecha::Cargar();
     }
-    else {
-        setDia(dia);
-        setMes(mes);
-        setAnio(anio);
-    }
+
 }
 
 
@@ -122,11 +115,11 @@ bool Fecha::operator>=(const Fecha& otra) {
     if (this->_anio > otra._anio) {
         return true;
     }
-    else if (this->_anio == otra._anio) {
+    if (this->_anio == otra._anio) {
         if (this->_mes > otra._mes) {
             return true;
         }
-        else if (this->_mes == otra._mes) {
+        if (this->_mes == otra._mes) {
             if (this->_dia >= otra._dia) {
                 return true;
             }

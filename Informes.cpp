@@ -3,93 +3,138 @@
 #include "VehiculosManager.h"
 #include "SucursalManager.h"
 #include "VendedorManager.h"
+#include "FuncionesGenerales.h"
+#include "Sistema.h"
 #include <iostream>
 #include <iomanip>
+#include "rlutil.h"
 using namespace std;
+
+void showItemInf(const char* text, int posx, int posy, bool selected)
+{
+
+    if (selected) {
+        rlutil::setBackgroundColor(rlutil::COLOR::GREEN);
+        rlutil::locate(posx - 3, posy);
+        std::cout << " " << text << " " << std::endl;
+
+    }
+    else {
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::locate(posx - 3, posy);
+        std::cout << "   " << text << "   " << std::endl;
+    }
+
+    rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+}
+
+enum Opciones {
+    Opcion1 = 0,
+    Opcion2 = 1,
+    Opcion3 = 2,
+    Opcion4 = 3,
+    Opcion5 = 4,
+    Opcion6 = 5,
+    Opcion7 = 6,
+    Opcion8 = 7
+};
+
 
 void Informes::Menu()
 {
-    int opcion;
+    Sistema programa;
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        system("cls");
-        cout << "--- INFORMES ---" << endl;
-        cout << "----------------------" << endl;
-        cout << "1. Informe del Inventario " << endl;
-        cout << "2. Informe de Recaudación Anual " << endl;
-        cout << "3. Informe Anual de Ventas por Vendedor " << endl;
-        cout << "4. Informe Mensual de Ventas para todos los Vendedores " << endl;
-        cout << "5. Informe Anual de Ventas por Sucursal " << endl;
-        cout << "6. Informe Ventas en todas las Sucursales (mensual o anual) " << endl;
-        cout << "7. Ranking Anual de Ventas por Modelo " << endl;
+        rlutil::cls();
 
-        cout << endl;
-        cout << "0. Volver al menu principal " << endl;
-        cout << "----------------------" << endl;
-        cout << "OPCION: " << endl;
-        cin >> opcion;
-        system("cls");
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
 
-        switch (opcion) {
-        case 1:
-            Inventario();
-            system("pause");
+        showItemInf("--- INFORMES ---", 50, 2, false);
+
+        showItemInf("Informe del Inventario", 53, 4, y == Opcion1);
+        showItemInf("Informe de Recaudación Anual", 53, 5, y == Opcion2);
+        showItemInf("Informe Anual de Ventas por Vendedor ", 53, 6, y == Opcion3);
+        showItemInf("Informe Mensual de Ventas para todos los Vendedores ", 53, 7, y == Opcion4);
+        showItemInf("Informe Anual de Ventas por Sucursal ", 53, 8, y == Opcion5);
+        showItemInf("Informe Ventas en todas las Sucursales (mensual o anual) ", 53, 9, y == Opcion6);
+        showItemInf("Ranking Anual de Ventas por Modelo ", 53, 10, y == Opcion7);
+        showItemInf("Regresar al Menu Principal ", 53, 13, y == Opcion8);
+
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
             break;
-
-        case 2:
-            recaudacionAnual();
-            system("pause");
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 8) {
+                y = 6;
+            }
             break;
-
-        case 3:
-            ventasXVendedorAnual();
-            system("pause");
-            break;
-
-        case 4:
-            ventasXVendedoresMensual();
-            system("pause");
-            break;
-
-        case 5:
-            ventasXSucursalAnual();
-            system("pause");
-            break;
-
-        case 6:
-        {
-            {
-                int opc;
-                cout << "** INFORME DE VENTAS EN TODAS LAS SUCURSALES ** " << endl;
-                cout << "------------------------------------------------------------" << endl;
-                cout << "Elija una opcion: " << endl;
-                cout << "1. Mensual" << endl;
-                cout << "2. Anual" << endl;
-                cout << endl;
-                cout << "Opcion: ";
-                cin >> opc;
-                cin.ignore();
-                cout << endl;
-
-                if (opc == 1) {
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1:
+                rlutil::cls();
+                Inventario();
+                system("pause");
+                break;
+            case Opcion2:
+                rlutil::cls();
+                recaudacionAnual();
+                system("pause");
+                break;
+            case Opcion3:
+                rlutil::cls();
+                ventasXVendedorAnual();
+                system("pause");
+                break;
+            case Opcion4:
+                rlutil::cls();
+                ventasXVendedoresMensual();
+                system("pause");
+                break;
+            case Opcion5:
+                rlutil::cls();
+                ventasXSucursalAnual();
+                system("pause");
+                break;
+            case Opcion6:
+                rlutil::cls();
+                int op;
+                cout << "1. Ventas en todas las sucursales (mensual)" << endl;
+                cout << "2. Ventas en todas las sucursales (anual)" << endl;
+                cout << "Ingrese una opcion: ";
+                cin >> op;
+                if (op == 1) {
                     ventasTodasLasSucursalesMensual();
                 }
-                if (opc == 2) {
+                else if (op == 2) {
                     ventasTodasLasSucursalesAnual();
                 }
                 system("pause");
                 break;
+            case Opcion7:
+                rlutil::cls();
+                rankingVentasXModelo();
+                system("pause");
+                break;
+            case Opcion8:
+                programa.Menu();
             }
         }
-        case 7:
-            rankingVentasXModelo();
-            system("pause");
-            break;
-
-        case 0:
-
-            break;
-        }
-    } while (opcion != 0);
+    } while (op != 0);
 }
 
 //1
@@ -159,8 +204,7 @@ void Informes::recaudacionAnual()
 
 	cout << "** INFORME DE RECAUDACION ANUAL ** " << endl;
     do {
-        cout << "Ingrese año a revisar: ";
-        cin >> anio;
+        anio = validarInt("Ingrese año a revisar: ");
 
         if (anio > f.obtenerAnioActual()) {
             cout << "Año no valido." << endl << endl;
@@ -218,11 +262,9 @@ void Informes::ventasXVendedorAnual()
     string meses[12] = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
     double recaudacion[13] = {};
 
-    cout << "Ingrese el numero de legajo del vendedor: ";
-    cin >> numLegajo;
+    numLegajo = validarInt("Ingrese el numero de legajo del vendedor: ");
     do {
-        cout << "Ingrese el año a revisar: ";
-        cin >> anio;
+        anio = validarInt("Ingrese el año a revisar: ");
 
         if (anio > f.obtenerAnioActual()) {
             cout << "Año no valido." << endl << endl;
@@ -294,16 +336,23 @@ void Informes::ventasXVendedoresMensual()
     int cantidadVentas = vs.contarVentas();
 
     do {
-        cout << "Ingrese año a revisar: ";
-        cin >> anio;
+        anio = validarInt("Ingrese el año a revisar: ");
 
         if (anio > f.obtenerAnioActual()) {
             cout << "Año no valido." << endl << endl;
         }
 
     } while (anio > f.obtenerAnioActual());
-    cout << "Ingrese el mes a revisar: ";
-    cin >> mes;
+
+    do {
+        mes = validarInt("Ingrese el mes a revisar: ");
+
+        if (mes < 1 || mes > 12) {
+            cout << "Mes no valido." << endl << endl;
+        }
+
+    } while (mes < 1 || mes > 12);
+
     system("cls");
 
     for (int i = 0; i < cantidadVentas; i++)
@@ -426,7 +475,6 @@ void Informes::ventasXVendedoresMensual()
     }
 }
 
-
 //5
 void Informes::ventasXSucursalAnual()
 {
@@ -445,8 +493,7 @@ void Informes::ventasXSucursalAnual()
 
     cout << "** INFORME ANUAL DE VENTAS POR SUCURSAL ** " << endl;
     do {
-        cout << "Ingrese año a revisar: ";
-        cin >> anio;
+        anio = validarInt("Ingrese el año a revisar: ");
 
         if (anio > f.obtenerAnioActual()) {
             cout << "Año no valido." << endl << endl;
@@ -454,8 +501,7 @@ void Informes::ventasXSucursalAnual()
 
     } while (anio > f.obtenerAnioActual());
     
-    cout << endl << "Ingrese Id de Sucursal: ";
-    cin >> id;
+    id = validarInt("Ingrese Id de Sucursal: ");
 
     cant = sa.contarRegistro();
     for (i = 0; i < cant; i++) {
@@ -513,6 +559,7 @@ void Informes::ventasTodasLasSucursalesMensual()
 {
     int anio, mes, contVentas;
     double acuMes;
+    Fecha f;
 
     Venta regV;
     VentasArchivo va;
@@ -524,10 +571,23 @@ void Informes::ventasTodasLasSucursalesMensual()
     int cont = sa.contarRegistro();
 
     cout << " INFORME MENSUAL DE VENTAS POR SUCURSAL  " << endl;
-    cout << "Ingrese año a revisar: ";
-    cin >> anio;
-    cout << endl << "Ingrese mes a revisar: ";
-    cin >> mes;
+    do {
+        anio = validarInt("Ingrese el año a revisar: ");
+
+        if (anio > f.obtenerAnioActual()) { 
+            cout << "Año no valido." << endl << endl;
+        } 
+
+    } while (anio > f.obtenerAnioActual()); 
+
+    do {
+        mes = validarInt("Ingrese el mes a revisar: ");
+
+        if (mes < 1 || mes > 12) {
+            cout << "Mes no valido." << endl << endl;
+        }
+
+    } while (mes < 1 || mes > 12);
     system("cls");
 
 
@@ -598,8 +658,7 @@ void Informes::ventasTodasLasSucursalesAnual()
 
     cout << " INFORME ANUAL DE VENTAS POR SUCURSAL  " << endl;
     do {
-        cout << "Ingrese el año a revisar: ";
-        cin >> anio;
+        anio = validarInt("Ingrese el año a revisar: ");
 
         if (anio > f.obtenerAnioActual()) {
             cout << "Año no valido." << endl << endl;
@@ -666,7 +725,8 @@ void Informes::ventasTodasLasSucursalesAnual()
 void Informes::rankingVentasXModelo()
 {
     int anio, cantVen, cantVeh;
-    bool sinVentas=true;
+    bool sinVentas = true;
+    Fecha f;
 
     VentasArchivo archiVen("Ventas.dat");
     Venta venReg;
@@ -682,9 +742,15 @@ void Informes::rankingVentasXModelo()
 
     cout << "- Ranking Anual de Ventas por Modelo -" << endl;
     cout << "---------------------------------------" << endl;
-    cout << "Ingrese el Año que desea Consultar: ";
-    cin >> anio;
-    //anio=validarInt();
+    do {
+        anio = validarInt("Ingrese el Año que desea Consultar: ");
+
+        if (anio > f.obtenerAnioActual()) {
+            cout << "Año no valido." << endl << endl;
+        }
+
+    } while (anio > f.obtenerAnioActual());
+    
     for (int i = 0; i < cantVen; i++) {
         venReg = archiVen.leerVenta(i);
         if (venReg.getFechaVenta().getAnio() == anio) {
@@ -694,7 +760,7 @@ void Informes::rankingVentasXModelo()
                 vehReg = archiVeh.leerRegistro(j);
                 if (venReg.getIdVehiculo() == vehReg.getIdVehiculo()) {
                     marca[venReg.getIdVehiculo() - 1] = vehReg.getMarca();
-                    modelo[venReg.getIdVehiculo()-1] = vehReg.getModelo();
+                    modelo[venReg.getIdVehiculo() - 1] = vehReg.getModelo();
                 }
             }
         }

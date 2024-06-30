@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Vendedor.h"
 #include "VendedorManager.h"
+#include "FuncionesGenerales.h"
 using namespace std;
 
 //Constructores
@@ -46,8 +47,7 @@ void Vendedor::setNroLegajo(int nroLegajo) {
         cin.clear();//limpia el estado de error
         cin.ignore(numeric_limits<int>::max(), '\n');
         cout << "Legajo no valido." << endl;
-        cout << "LEGAJO: ";
-        cin >> nroLegajo;
+        nroLegajo = validarInt("LEGAJO: ");
     }
     _nroLegajo = nroLegajo;
 }

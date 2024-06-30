@@ -6,8 +6,8 @@ using namespace std;
 
 Cliente::Cliente() : _direccion()
 {
-    strcpy(_email ,"nn");
-    strcpy(_telefono, "1");
+    setEmail("nnnnnn");
+    setTelefono("1");
     setEliminado(false);
 
 }
@@ -34,11 +34,11 @@ bool Cliente::getEliminado()
 
 void Cliente::setEmail(string e)
 {
-    if (e.size() < 50) {
+    if (e.size() < 50 && e.size() >= 6) {
 	    strcpy(_email, e.c_str());
     }
     else {
-        cout << "Email excede limite de caracteres (50). Intente nuevamente:" << endl;
+        cout << "Email no cumple con limite de caracteres (6 a 50). Intente nuevamente:" << endl;
         getline(cin, e); 
         this->setEmail(e);
     }
@@ -46,7 +46,14 @@ void Cliente::setEmail(string e)
 
 void Cliente::setTelefono(string tel)
 {
-    strcpy(_telefono, tel.c_str());
+    if (tel.size() <= 19) {
+        strcpy(_telefono, tel.c_str());
+    }
+    else {
+        cout << "Telefono no cumple con limite de caracteres (20). Intente nuevamente:" << endl;
+        getline(cin, tel); 
+        this->setTelefono(tel);
+    }
 }
 
 void Cliente::setDireccion(Direccion d)

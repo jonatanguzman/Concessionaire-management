@@ -18,6 +18,7 @@ public:
     void setNumero(int n);
     void setProvincia(std::string p);
     void setCP(int cp);
+    bool validar(int cp);
     void Cargar();
     void Mostrar();
     void MostrarEnLinea();

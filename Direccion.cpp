@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include "Direccion.h"
+#include "FuncionesGenerales.h"
 #include <cstring>
 
 using namespace std;
@@ -21,7 +22,7 @@ Direccion::Direccion(string calle, int numero, string provincia, int cp) {
 }
 
 string Direccion::getCalle() {
-    
+
     return _calle;
 }
 
@@ -50,26 +51,28 @@ void Direccion::setProvincia(string p) {
 }
 
 void Direccion::setCP(int cp) {
+    while (!validar(cp)) {
+        cin.clear();//limpia el estado de error
+        cout << "CP no valido. Intente nuevamente. " << endl;
+        cp = validarInt("Codigo Postal: # ");
+    }
+
     _cp = cp;
 }
 
 void Direccion::Cargar() {
-    string c, p; 
-    int n, cp; 
+    string c, p;
+    int n, cp;
 
     cout << "Calle: ";
     getline(cin, c);
     setCalle(c);
-    cout << "Numero #";
-    cin >> n;
-    cin.ignore();
+    n = validarInt("Numero #");
     setNumero(n);
     cout << "Provincia: ";
     getline(cin, p);
     setProvincia(p);
-    cout << "Codigo Postal: #";
-    cin >> cp;
-    cin.ignore();
+    cp = validarInt("Codigo Postal: #");
     setCP(cp);
 }
 
@@ -82,7 +85,7 @@ void Direccion::Mostrar() {
 
 void Direccion::MostrarEnLinea()
 {
-    cout << _calle << " " <<  _numero << ", " << _provincia << ", CP: #" << _cp;
+    cout << _calle << " " << _numero << ", " << _provincia << ", CP: #" << _cp;
 }
 
 string Direccion::toString()
@@ -91,4 +94,16 @@ string Direccion::toString()
     valorADevolver = getCalle() + " #" + to_string(getNumero()) + ", " + getProvincia() + ", CP: " + to_string(getCP());
 
     return valorADevolver;
+}
+
+bool Direccion::validar(int cp)
+{
+    int numDigitos = contarDigitos(cp);
+    int  minimoDigito = 1;
+    int maximoDigito = 4;
+
+    if (numDigitos >= minimoDigito && numDigitos <= maximoDigito) {
+        return true;
+    }
+    return false;
 }

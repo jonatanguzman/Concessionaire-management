@@ -24,6 +24,7 @@ public:
 	void backupArchivo();
 	void restaurarBackup();
 	void borrarVenta();
+	void restaurarVentaBorrada();
 	
 	int validarCliente(long long dni);
 	void crearNuevoCliente(long long dni);

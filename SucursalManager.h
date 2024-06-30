@@ -10,8 +10,11 @@ public:
 	
 	bool validarIDUnico(int id);
 	void agregarRegistro();
-	void listarRegistros();
 	void ordenarNombre(Sucursal obj[], int tam);
+	void ordenarID(Sucursal obj[], int tam);
+	void listarPorID();
+	void listarPorNombre();
+	void listarRegistros();
 	void buscarSucursal();
 	void buscarSucursalID();
 	void buscarSucursalNombre();
@@ -23,4 +26,6 @@ public:
 	void bajaLogica();
 	void backupArchivo();
 	void restaurarBackup();
+	void realizarBackupSucursal();
+	void restaurarBackupSucursal();
 };

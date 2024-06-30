@@ -1,413 +1,437 @@
 # include<iostream>
 using namespace std;
-#include"Configuracion.h"
+#include "VehiculosManager.h"
+#include "VentasManager.h"
+#include "SucursalManager.h"
+#include "VendedorManager.h"
+#include "ClienteManager.h"
+#include "Configuracion.h"
+#include "FuncionesGenerales.h"
+#include "Sistema.h"
+#include "rlutil.h"
 
-void Configuracion::Menu() {
-    int opc;
-    do {
-        system("cls");
-        cout << "------ Configuracion ------" << endl;
-        cout << "---------------------------" << endl;
-        cout << "1) SubMenu Vehiculos " << endl;
-        cout << "2) SubMenu Ventas " << endl;
-        cout << "3) SubMenu Sucursales " << endl;
-        cout << "4) SubMenu Vendedores " << endl;
-        cout << "5) SubMenu Clientes " << endl << endl;
-        cout << "----------------------------" << endl;
-        cout << "0) Regresar al Menu Principal " << endl << endl;
-        cout << "Selecione una Opcion: ";
-        cin >> opc;
-        switch (opc) {
-        case 1:system("cls");
-            subMenuVehiculos();
-            break;
-        case 2:system("cls");
-            subMenuVentas();
-            break;
-        case 3:system("cls");
-            subMenuSucursales();
-            break;
-        case 4:system("cls");
-            subMenuVendedores();
-            break;
-        case 5:system("cls");
-            subMenuClientes();
-            break;
-        case 0:
-            return;
-        default:cout << endl << "* Selecione una Opcion Correcta! *" << endl << endl;
-            system("pause");
-        }
-    } while (opc != 0);
+
+void showItemCf(const char* text, int posx, int posy, bool selected)
+{
+
+    if (selected) {
+        rlutil::setBackgroundColor(rlutil::COLOR::LIGHTBLUE);
+        rlutil::locate(posx - 3, posy);
+        std::cout << " " << text << " " << std::endl;
+
+    }
+    else {
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::locate(posx - 3, posy);
+        std::cout << "   " << text << "   " << std::endl;
+    }
+
+    rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
 }
 
-void realizarBackupVehiculos() {
-    int opc;
-    cout << endl;
-    cout << "- Confirma el Backup del Archivo Vehiculos?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
+enum Opciones {
+    Opcion1 = 0,
+    Opcion2 = 1,
+    Opcion3 = 2,
+    Opcion4 = 3,
+    Opcion5 = 4,
+    Opcion6 = 5,
+};
+
+void Configuracion::Menu() 
+{   
+    Sistema programa;
+
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        cin >> opc;
-        switch (opc) {
-        case 1:
-            cout << endl;
-            system("copy Vehiculos.dat Vehiculos.bkp");
-            cout << "* Backup Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemCf("--- CONFIGURACIÓN ---", 50, 2, false);
+
+        showItemCf("SubMenu Vehiculos ", 53, 4, y == Opcion1);
+        showItemCf("SubMenu Ventas ", 53, 5, y == Opcion2);
+        showItemCf("SubMenu Sucursales ", 53, 6, y == Opcion3);
+        showItemCf("SubMenu Vendedores ", 53, 7, y == Opcion4);
+        showItemCf("SubMenu Clientes ", 53, 8, y == Opcion5);
+        showItemCf("Regresar al Menu Principal ", 53, 11, y == Opcion6);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 6) {
+                y = 6;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case Opcion1:
+                rlutil::cls();
+                subMenuVehiculos();
+                system("pause");
+                break;
+            case Opcion2:
+                rlutil::cls();
+                subMenuVentas();
+                system("pause");
+                break;
+            case Opcion3:
+                rlutil::cls();
+                subMenuSucursales();
+                system("pause");
+                break;
+            case Opcion4:
+                rlutil::cls();
+                subMenuVendedores();
+                system("pause");
+                break;
+            case Opcion5:
+                rlutil::cls();
+                subMenuClientes();
+                system("pause");
+                break;
+            case Opcion6:
+                programa.Menu();
+            }
         }
-    } while (opc != 2);
+    } while (op != 0);
 }
 
-void restaurarBackupVehiculos() {
-    int opc;
-    cout << endl;
-    cout << "- Confirma la Restauracion del Archivo Vehiculos?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1:
-            cout << endl;
-            system("copy Vehiculos.bkp Vehiculos.dat");
-            cout << "* Restauracion Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
+enum OpionesAVehiculos
+{
+    opcion1AVehiculos= 1,
+    opcion2AVehiculos = 2,
+    opcion3AVehiculos = 3
+};
 
 void Configuracion::subMenuVehiculos() {
-    int opc;
-    cout << "--- Archivo Vehiculos ---" << endl;
-    cout << "1) Realizar Backup " << endl;
-    cout << "2) Restaurar Backup " << endl;
-    cout << "0) Regresar al Menu " << endl;
-    cout << "Ingrese una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc)
-        {
-        case 1:
-            realizarBackupVehiculos();
-            system("cls");
-            return;
-        case 2:
-            restaurarBackupVehiculos();
-            system("cls");
-            return;
-        case 0:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
+    VehiculosManager vehiculos;
+
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
+    do{
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemCf("--- ARCHIVO VEHICULOS ---", 50, 2, false);
+        showItemCf("Realizar Backup ", 53, 4, y == opcion1AVehiculos);
+        showItemCf("Restaurar Backup ", 53, 5, y == opcion2AVehiculos);
+        showItemCf("Regresar al menu anterior ", 53, 8, y == opcion3AVehiculos);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 3) {
+                y = 3;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case opcion1AVehiculos:
+                rlutil::cls();
+                vehiculos.realizarBackup();
+                system("pause");
+                break;
+            case opcion2AVehiculos:
+                rlutil::cls();
+                vehiculos.restaurarBackup();
+                system("pause");
+                break;
+            case opcion3AVehiculos:
+                rlutil::cls();
+                Menu();
+                break;
+            }
         }
-    } while (opc != 0);
+    } while (op != 0);
 }
 
-void realizarBackupVentas() {
-    int opc;
-    cout << "- Desea Relizar Backup del Archivo Ventas?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Ventas.dat Ventas.bkp");
-            cout << "* Backup Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
-
-void restaurarBackupVentas() {
-    int opc;
-    cout << "- Desea Restaurar el Archivo Ventas?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Ventas.bkp Ventas.dat");
-            cout << "* Restauracion Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
+enum OpionesSVentas
+{
+    opcion1SVentas = 1,
+    opcion2SVentas = 2,
+    opcion3SVentas = 3
+};
 
 void Configuracion::subMenuVentas() {
-    int opc;
-    cout << "--- Archivo Ventas ---" << endl;
-    cout << "1) Realizar Backup " << endl;
-    cout << "2) Restaurar Backup " << endl;
-    cout << "0) Regresar al Menu " << endl;
-    cout << "Ingrese una Opcion: ";
+    VentasManager ventas;
+
+    int op = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        cin >> opc;
-        switch (opc)
-        {
-        case 1: realizarBackupVentas();
-            system("cls");
-            return;
-        case 2: restaurarBackupVentas();
-            system("cls");
-            return;
-        case 0:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 0);
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemCf("--- ARCHIVO VENTAS ---", 50, 2, false);
+        showItemCf("Realizar Backup ", 53, 4, y == opcion1SVentas);
+        showItemCf("Restaurar Backup ", 53, 5, y == opcion2SVentas);
+        showItemCf("Regresar al Menu ", 53, 8, y == opcion3SVentas);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 3) {
+                y = 3;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case opcion1SVentas:
+                rlutil::cls();
+                ventas.backupArchivo();
+                system("pause");
+                break;
+            case opcion2SVentas:
+                rlutil::cls();
+                ventas.restaurarBackup();
+                system("pause");
+                break;
+            case opcion3SVentas:
+                rlutil::cls();
+                Menu();
+                break;
+            }
+        } 
+    } while (op != 0);
 }
 
-void realizarBackupSucursales() {
-    int opc;
-    cout << "- Desea Relizar Backup del Archivo Sucursales?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Sucursales.dat Sucursales.bkp");
-            cout << "* Backup Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
-
-void restaurarBackupSucursales() {
-    int opc;
-    cout << "- Desea Restaurar el Archivo de Sucursales?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Sucursales.bkp Sucursales.dat");
-            cout << "* Restauracion Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
+enum OpionesSSucursales
+{
+	opcion1SSucursales = 1,
+	opcion2SSucursales = 2,
+	opcion3SSucursales = 3
+};
 
 void Configuracion::subMenuSucursales() {
-    int opc;
-    cout << "--- Archivo Sucursales ---" << endl;
-    cout << "1) Realizar Backup " << endl;
-    cout << "2) Restaurar Backup " << endl;
-    cout << "0) Regresar al Menu " << endl;
-    cout << "Ingrese una Opcion: ";
+    SucursalManager sucursales;
+
+    int opc = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        cin >> opc;
-        switch (opc)
-        {
-        case 1: realizarBackupSucursales();
-            system("cls");
-            return;
-        case 2: restaurarBackupSucursales();
-            system("cls");
-            return;
-        case 0:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemCf("--- ARCHIVO SUCURSALES ---", 50, 2, false);
+        showItemCf("Realizar Backup ", 53, 4, y == opcion1SSucursales);
+        showItemCf("Restaurar Backup ", 53, 5, y == opcion2SSucursales);
+        showItemCf("Regresar al Menu ", 53, 8, y == opcion3SSucursales);
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+		    rlutil::locate(28, 10 + y);
+		    std::cout << " " << std::endl;
+            y--;
+		    if (y < 0) {
+			    y = 0;
+		    }
+            break;
+        case 15: // DOWN
+             rlutil::locate(28, 10 + y);
+             std::cout << " " << std::endl;
+             y++;
+             if (y > 3) {
+	    		y = 3;
+	   		}
+             break;
+        case 1: // ENTER
+              switch (y) {
+	    		case opcion1SSucursales:
+                    rlutil::cls();
+					sucursales.backupArchivo();
+					system("pause");
+                    break;
+			    case opcion2SSucursales:
+                    rlutil::cls();
+					sucursales.restaurarBackup();
+					system("pause");
+					break;
+				case opcion3SSucursales:
+                    rlutil::cls();
+					Menu();
+					break;
+			  }
+		}
     } while (opc != 0);
 }
 
-void realizarBackupVendedores() {
-    int opc;
-    cout << "- Desea Relizar Backup del Archivo Vendedores?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Vendedores.dat Vendedores.bkp");
-            cout << "* Backup Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
-
-
-void restaurarBackupVendedores() {
-    int opc;
-    cout << "- Desea Restaurar el Archivo de Vendedores?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Vendedores.bkp Vendedores.dat");
-            cout << "* Restauracion Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
+enum OpionesSVendedores
+{
+	opcion1SVendedores = 1,
+	opcion2SVendedores = 2,
+	opcion3SVendedores = 3
+};
 
 void Configuracion::subMenuVendedores() {
-    int opc;
-    cout << "--- Archivo Vendedores ---" << endl;
-    cout << "1) Realizar Backup " << endl;
-    cout << "2) Restaurar Backup " << endl;
-    cout << "0) Regresar al Menu " << endl;
-    cout << "Ingrese una Opcion: ";
+    VendedorManager vendedores;
+
+    int opc = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
     do {
-        cin >> opc;
-        switch (opc)
-        {
-        case 1: realizarBackupVendedores();
-            system("cls");
-            return;
-        case 2: restaurarBackupVendedores();
-            system("cls");
-            return;
-        case 0:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemCf("--- ARCHIVO VENDEDORES ---", 50, 2, false);
+        showItemCf("Realizar Backup ", 53, 4, y == opcion1SVendedores);
+        showItemCf("Restaurar Backup ", 53, 5, y == opcion2SVendedores);
+        showItemCf("Regresar al Menu ", 53, 8, y == opcion3SVendedores);
+
+
+        switch (rlutil::getkey()) {
+        case 14: // UP
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y--;
+            if (y < 0) {
+                y = 0;
+            }
+            break;
+        case 15: // DOWN
+            rlutil::locate(28, 10 + y);
+            std::cout << " " << std::endl;
+            y++;
+            if (y > 3) {
+                y = 3;
+            }
+            break;
+        case 1: // ENTER
+            switch (y) {
+            case opcion1SVendedores:
+                rlutil::cls();
+                vendedores.realizarBackupVendedores();
+                system("pause");
+                break;
+            case opcion2SVendedores:
+                rlutil::cls();
+                vendedores.restaurarBackupVendedores();
+                system("pause");
+                break;
+            case opcion3SVendedores:
+                rlutil::cls();
+                Menu();
+                break;
+            }
         }
     } while (opc != 0);
 }
 
-void restaurarBackupClientes() {
-    int opc;
-    cout << "- Desea Restaurar el Archivo de Clientes?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Clientes.bkp Clientes.dat");
-            cout << "* Restauracion Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
-
-void realizarBackupClientes() {
-    int opc;
-    cout << "- Desea Relizar Backup del Archivo Clientes?" << endl;
-    cout << " (1)SI (2)NO " << endl;
-    cout << "Selecione una Opcion: ";
-    do {
-        cin >> opc;
-        switch (opc) {
-        case 1: system("copy Clientes.dat Clientes.bkp");
-            cout << "* Backup Realizado con Exito! *" << endl;
-            cout << endl;
-            system("pause");
-            return;
-        case 2:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 2);
-}
+enum OpionesSClientes
+{
+	opcion1SClientes = 1,
+	opcion2SClientes = 2,
+	opcion3SClientes = 3
+};
 
 void Configuracion::subMenuClientes() {
-    int opc;
-    cout << "--- Archivo Clientes ---" << endl;
-    cout << "1) Realizar Backup " << endl;
-    cout << "2) Restaurar Backup " << endl;
-    cout << "0) Regresar al Menu " << endl;
-    cout << "Ingrese una Opcion: ";
+    ClienteManager clientes;
+
+    int opc = 1;
+    int y = 0;
+    rlutil::hidecursor();
+
+
     do {
-        cin >> opc;
-        switch (opc)
-        {
-        case 1: realizarBackupClientes();
-            system("cls");
-            return;
-        case 2: restaurarBackupClientes();
-            system("cls");
-            return;
-        case 0:
-            system("cls");
-            return;
-        default:
-            cout << "* Opcion Incorrecta *" << endl;
-            cout << "- Seleccione una Opcion Correcta: ";
-        }
-    } while (opc != 0);
-}
+        rlutil::cls();
+
+        rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
+        rlutil::setColor(rlutil::COLOR::WHITE);
+        rlutil::hidecursor();
+
+        showItemCf("--- ARCHIVO CLIENTES ---", 50, 2, false);
+        showItemCf("Realizar Backup ", 53, 4, y == opcion1SClientes);
+        showItemCf("Restaurar Backup ", 53, 5, y == opcion2SClientes);
+        showItemCf("Regresar al Menu ", 53, 8, y == opcion3SClientes);
+
+        
+        switch (rlutil::getkey()) {
+            case 14: // UP
+			rlutil::locate(28, 10 + y);
+			std::cout << " " << std::endl;
+			y--;
+			if (y < 0) {
+				y = 0;
+			}
+			break;
+            case 15: // DOWN
+                rlutil::locate(28, 10 + y);
+                std::cout << " " << std::endl;
+                y++;
+                if (y > 3) {
+					y = 3;
+				}
+                break;
+			case 1: // ENTER
+				switch (y) {
+				case opcion1SClientes:
+                    rlutil::cls();
+					clientes.backupArchivo();
+					system("pause");
+					break;
+				case opcion2SClientes:
+                    rlutil::cls();
+					clientes.restaurarBackup();
+					system("pause");
+					break;
+				case opcion3SClientes:
+                    rlutil::cls();
+					Menu();
+					break;
+				}
+			}
+        } while (opc != 0);
+    }

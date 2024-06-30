@@ -7,6 +7,8 @@ private:
 public:
     VendedorManager();
 
+    void PlanillaVendedor();
+
     Vendedor CrearVendedor();
     void MostrarVendedor(Vendedor vendedor);
     void AgregarVendedor();
@@ -25,5 +27,6 @@ public:
     void ListarAntiguedad();
     void OrdenarPorApellido(Vendedor* obj, int cantidad, bool criterio(std::string, std::string));
     void ListarApellido();
+    void menuListar();
     void MostrarPantalla();
 };
