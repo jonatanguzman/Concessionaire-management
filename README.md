@@ -1,2 +1,2 @@
-# Grupo34Lab2
+# ProyectoLab2
  Sistema de Gestion para Agencias de Vehiculos
