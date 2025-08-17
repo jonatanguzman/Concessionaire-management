@@ -1,4 +1,4 @@
-🚗 ProyectoLab2 - Gestor de Ventas para Concesionaria (C# WinForms)
+🚗 Gestor de Ventas para Concesionaria (C# WinForms)
 Este proyecto fue desarrollado como parte del trabajo práctico integrador de Laboratorio de Computación II en la facultad. Se trata de una aplicación de escritorio que simula el funcionamiento interno de una concesionaria, permitiendo la gestión de vehículos, clientes y ventas.
 
 🎯 Objetivos del proyecto
