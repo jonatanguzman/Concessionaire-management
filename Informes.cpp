@@ -115,8 +115,8 @@ void Informes::Menu()
                 int op;
                 cout << "1. Ventas en todas las sucursales (mensual)" << endl;
                 cout << "2. Ventas en todas las sucursales (anual)" << endl;
-                cout << "Ingrese una opcion: ";
-                cin >> op;
+                op = validarInt("Ingrese una opcion: ");
+                system("cls");
                 if (op == 1) {
                     ventasTodasLasSucursalesMensual();
                 }
@@ -750,7 +750,7 @@ void Informes::rankingVentasXModelo()
         }
 
     } while (anio > f.obtenerAnioActual());
-    
+
     for (int i = 0; i < cantVen; i++) {
         venReg = archiVen.leerVenta(i);
         if (venReg.getFechaVenta().getAnio() == anio) {

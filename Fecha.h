@@ -23,5 +23,7 @@ public:
     int obtenerDiaActual();
     Fecha obtenerFechaActual();
 
+    bool esFechaValida(int dia, int mes, int anio);
+
 };
 

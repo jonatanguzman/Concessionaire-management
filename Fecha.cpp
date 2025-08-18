@@ -67,10 +67,7 @@ void Fecha::Cargar() {
     anio = validarInt("Año: ");
     setAnio(anio); 
 
-    time_t now = time(0);
-    tm* f = localtime(&now);
-    /// Verifica si la fecha es anterior o igual a la fecha actual
-    if (anio > f->tm_year + 1900 || (anio == f->tm_year + 1900 && mes > f->tm_mon + 1) || (anio == f->tm_year + 1900 && mes == f->tm_mon + 1 && dia > f->tm_mday)) {
+    if(esFechaValida(dia,mes,anio) == false) {
         cout << "Fecha No Valida, Ingresela Nuevamente " << endl;
         Fecha::Cargar();
     }
@@ -188,4 +185,33 @@ Fecha Fecha::obtenerFechaActual()
 
     return Fecha(tiempoLocal->tm_mday, tiempoLocal->tm_mon+1, tiempoLocal->tm_year+1900);
 
+}
+
+bool Fecha::esFechaValida(int dia, int mes, int anio) {
+    /// Obtiene la fecha actual
+    time_t now = time(0);
+    tm* f = localtime(&now);
+    /// Verifica si la fecha es anterior o igual a la fecha actual
+    if (anio > f->tm_year + 1900 || (anio == f->tm_year + 1900 && mes > f->tm_mon + 1) || (anio == f->tm_year + 1900 && mes == f->tm_mon + 1 && dia > f->tm_mday)) {
+        cout << "------------------------------" << endl;
+        cout << "La fecha debe ser anterior o igual a la fecha actual." << endl;
+        cout << "Fecha actual:" << f->tm_mday << "/" << f->tm_mon + 1 << "/" << f->tm_year + 1900 << endl;
+        return false;
+    }
+    /// Verifica si el año es bisiesto (tiene 29 días en febrero)
+    bool esBisiesto = (anio % 4 == 0 && anio % 100 != 0) || (anio % 400 == 0);
+
+    /// Verifica si el día es válido para el mes y año dados
+    if (mes == 2) { /// Febrero
+        if (esBisiesto) {
+            return dia >= 1 && dia <= 29;
+        }
+        else {
+            return dia >= 1 && dia <= 28;
+        }
+    }
+    else if (mes == 4 || mes == 6 || mes == 9 || mes == 11) { /// Abril, Junio, Septiembre, Noviembre
+        return dia >= 1 && dia <= 30;
+    }
+    return true;
 }
